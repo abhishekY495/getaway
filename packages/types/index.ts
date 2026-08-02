@@ -1,1 +1,1 @@
-export const greeting = "YOOOOOOOOOOOOOOOOOOOO 123123";
+export const greeting = "WASSUUUUUUUUUUUUUUUP 123123";
