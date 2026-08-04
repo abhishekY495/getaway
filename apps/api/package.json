@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec tsx src/index.ts",
     "build": "tsc",
@@ -13,15 +13,18 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@repo/types": "^1.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "drizzle-orm": "^0.45.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^26.1.2",
+    "drizzle-kit": "^0.31.10",
     "nodemon": "^3.1.14",
     "tsx": "^4.23.4",
     "typescript": "^5.9.2"

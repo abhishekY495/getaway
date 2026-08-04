@@ -1,17 +1,26 @@
-import express from "express";
-import { greeting } from "@repo/types";
+import express, { type Response } from "express";
+import type { API_RESPONSE_T } from "@repo/types";
+import { ENV } from "./config/env.js";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = ENV.PORT;
 
-console.log(greeting);
+app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/", (req, res: Response<API_RESPONSE_T>) => {
   res.json({
-    message: "API Running",
+    status: "Ok",
+    statusMessage: "API Running",
+  });
+});
+
+app.get("/health", (req, res: Response<API_RESPONSE_T>) => {
+  res.json({
+    status: "good",
+    statusMessage: "API Running",
   });
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`server started on http://localhost:${port}`);
 });

@@ -1,1 +1,5 @@
-export const greeting = "WASSUUUUUUUUUUUUUUUP 123123";
+export type API_RESPONSE_T = {
+  status: string;
+  statusMessage: string;
+  data?: string;
+};
