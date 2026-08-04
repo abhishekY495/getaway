@@ -65,6 +65,7 @@ export const citiesTable = pgTable("cities", {
     .references(() => countriesTable.id)
     .notNull(),
   name: text("name").notNull(),
+  coverImage: text("cover_image").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

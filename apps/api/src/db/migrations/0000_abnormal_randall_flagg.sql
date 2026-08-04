@@ -29,10 +29,9 @@ CREATE TABLE "cities" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"country_id" integer NOT NULL,
 	"name" text NOT NULL,
-	"slug" text NOT NULL,
+	"cover_image" text NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "cities_slug_unique" UNIQUE("slug")
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "countries" (

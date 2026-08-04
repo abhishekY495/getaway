@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1785854836767,
-      "tag": "0000_ancient_corsair",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1785860494386,
-      "tag": "0001_gigantic_captain_cross",
+      "when": 1785868447183,
+      "tag": "0000_abnormal_randall_flagg",
       "breakpoints": true
     }
   ]
