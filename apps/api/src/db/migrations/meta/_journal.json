@@ -8,6 +8,13 @@
       "when": 1785854836767,
       "tag": "0000_ancient_corsair",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785860494386,
+      "tag": "0001_gigantic_captain_cross",
+      "breakpoints": true
     }
   ]
 }
