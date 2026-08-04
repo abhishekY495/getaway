@@ -8,6 +8,13 @@
       "when": 1785868447183,
       "tag": "0000_abnormal_randall_flagg",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785871949615,
+      "tag": "0001_superb_jack_power",
+      "breakpoints": true
     }
   ]
 }

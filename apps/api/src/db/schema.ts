@@ -80,7 +80,6 @@ export const venuesTable = pgTable("venues", {
     .references(() => citiesTable.id)
     .notNull(),
   name: text("name").notNull(),
-  address: text("address").notNull(),
   description: text("description"),
   coverImage: text("cover_image"),
   rating: numeric("rating", {
