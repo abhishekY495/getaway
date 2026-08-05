@@ -15,6 +15,13 @@
       "when": 1785871949615,
       "tag": "0001_superb_jack_power",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1785913077384,
+      "tag": "0002_overrated_shard",
+      "breakpoints": true
     }
   ]
 }
