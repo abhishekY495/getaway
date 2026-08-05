@@ -101,7 +101,6 @@ export const eventsTable = pgTable("events", {
     .references(() => venuesTable.id)
     .notNull(),
   title: text("title").notNull(),
-  description: text("description"),
   operatingHours: jsonb("operating_hours")
     .$type<OperatingHour[]>()
     .default([])
