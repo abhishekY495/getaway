@@ -4,7 +4,7 @@ import { greeting } from "@repo/types";
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Text>{greeting}</Text>
+      <Text className="text-red-500 font-bold text-5xl">{greeting}</Text>
     </View>
   );
 }
