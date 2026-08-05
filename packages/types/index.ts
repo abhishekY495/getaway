@@ -3,3 +3,5 @@ export type API_RESPONSE_T = {
   statusMessage: string;
   data?: string;
 };
+
+export const greeting = "WASUUUUUUUUUUUUUUUUUUUUUP";
