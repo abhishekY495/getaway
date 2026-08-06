@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 
-export default function HomeScreen() {
+export default function ExploreScreen() {
   return (
     <View className="flex-1 bg-white">
-      <Text>Home</Text>
+      <Text>Explore</Text>
     </View>
   );
 }

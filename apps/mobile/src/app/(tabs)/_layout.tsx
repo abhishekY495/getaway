@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { CompassIcon, HomeIcon, UserIcon } from "lucide-react-native";
+import { CompassIcon, TicketIcon, UserIcon } from "lucide-react-native";
 
 export default function TabsLayout() {
   return (
@@ -16,18 +16,22 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: "Explore",
           tabBarIcon: ({ color, size, focused }) => (
-            <HomeIcon color={color} size={size} strokeWidth={focused ? 3 : 2} />
+            <CompassIcon
+              color={color}
+              size={size}
+              strokeWidth={focused ? 3 : 2}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="bookings"
         options={{
-          title: "Explore",
+          title: "Bookings",
           tabBarIcon: ({ color, size, focused }) => (
-            <CompassIcon
+            <TicketIcon
               color={color}
               size={size}
               strokeWidth={focused ? 3 : 2}

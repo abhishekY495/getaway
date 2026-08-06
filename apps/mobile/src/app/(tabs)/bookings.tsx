@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 
-export default function ExploreScreen() {
+export default function BookingsScreen() {
   return (
     <View className="flex-1 bg-white">
-      <Text>ExploreScreen</Text>
+      <Text>BookingsScreen</Text>
     </View>
   );
 }
