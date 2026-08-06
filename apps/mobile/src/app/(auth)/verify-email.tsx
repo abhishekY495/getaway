@@ -44,7 +44,7 @@ export default function VerifyEmail() {
       await signUp.finalize({
         navigate: ({ session, decorateUrl }) => {
           if (session.currentTask) return;
-          const url = decorateUrl("/");
+          const url = decorateUrl("/setup-account");
           router.replace(url as any);
         },
       });
