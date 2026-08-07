@@ -4,4 +4,5 @@ export const QUERY_KEYS = {
   getUser: "getUser",
   getTopDestinations: "getTopDestinations",
   getTopVenues: "getTopVenues",
+  getTopEvents: "getTopEvents",
 };

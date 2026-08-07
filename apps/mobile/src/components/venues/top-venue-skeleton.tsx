@@ -1,7 +1,7 @@
 import { View } from "react-native";
-import Skeleton from "./skeleton";
+import Skeleton from "../skeleton";
 
-export default function TopVenuesSkeleton() {
+export default function TopVenueSkeleton() {
   return (
     <View className="items-start justify-start mx-2 gap-1 w-44">
       <Skeleton width={152} height={200} borderRadius={5} />

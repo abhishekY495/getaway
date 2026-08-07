@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import { StarIcon } from "lucide-react-native";
 
-export default function TopVenues({ venue }: { venue: TopVenuesSchema_T }) {
+export default function TopVenue({ venue }: { venue: TopVenuesSchema_T }) {
   const formattedReviewCount = new Intl.NumberFormat("en", {
     notation: "compact",
     maximumFractionDigits: 0,
