@@ -29,6 +29,13 @@
       "when": 1785914186927,
       "tag": "0003_rich_red_ghost",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786120314381,
+      "tag": "0004_dizzy_beast",
+      "breakpoints": true
     }
   ]
 }

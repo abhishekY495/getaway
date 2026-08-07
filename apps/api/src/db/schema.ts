@@ -80,13 +80,15 @@ export const venuesTable = pgTable("venues", {
     .references(() => citiesTable.id)
     .notNull(),
   name: text("name").notNull(),
-  description: text("description"),
-  coverImage: text("cover_image"),
+  description: text("description").notNull(),
+  coverImage: text("cover_image").notNull(),
   rating: numeric("rating", {
     precision: 2,
     scale: 1,
-  }).default("0"),
-  reviewCount: integer("review_count").default(0),
+  })
+    .default("0")
+    .notNull(),
+  reviewCount: integer("review_count").default(0).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
