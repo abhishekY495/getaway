@@ -4,17 +4,25 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useGetTopDestinations } from "@/lib/hooks/destinations/use-get-top-destinations";
 import TopDestinationsSkeleton from "@/components/top-destinations-skeleton";
 import TopDestinations from "@/components/top-destinations";
+import { useGetTopVenues } from "@/lib/hooks/venues/use-get-top-venues";
+import TopVenuesSkeleton from "@/components/top-venues-skeleton";
+import TopVenues from "@/components/top-venues";
 
 const videoSource = require("@/assets/hero-video.mp4");
 
 export default function ExploreScreen() {
   const player = useVideoPlayer(videoSource, (player) => {
     player.loop = true;
-    // player.play();
+    player.play();
   });
 
-  const { data, isLoading } = useGetTopDestinations();
-  const destinations = data?.data;
+  const { data: topDestinationsData, isLoading: topDestinationsLoading } =
+    useGetTopDestinations();
+  const topDestinations = topDestinationsData?.data;
+
+  const { data: topVenuesData, isLoading: topVenuesLoading } =
+    useGetTopVenues();
+  const topVenues = topVenuesData?.data;
 
   return (
     <View className="flex-1 bg-white">
@@ -36,27 +44,52 @@ export default function ExploreScreen() {
         />
       </View>
       {/*  */}
-      <View className="mt-16 mx-4">
-        <Text className="font-black text-2xl mb-3">
-          World's top destinations
-        </Text>
-        {isLoading ? (
-          <FlatList
-            data={[1, 2, 3, 4, 5]}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.toString()}
-            renderItem={() => <TopDestinationsSkeleton />}
-          />
-        ) : (
-          <FlatList
-            data={destinations}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <TopDestinations destination={item} />}
-          />
-        )}
+      <View className="flex gap-12 mt-16 mx-4">
+        <View>
+          <Text className="font-black text-2xl mb-3">
+            World's top destinations
+          </Text>
+          {topDestinationsLoading ? (
+            <FlatList
+              data={[1, 2, 3, 4, 5]}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item.toString()}
+              renderItem={() => <TopDestinationsSkeleton />}
+            />
+          ) : (
+            <FlatList
+              data={topDestinations}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => <TopDestinations destination={item} />}
+            />
+          )}
+        </View>
+        {/*  */}
+        <View>
+          <Text className="font-black text-2xl mb-3">
+            Top attractions globally
+          </Text>
+          {topVenuesLoading ? (
+            <FlatList
+              data={[1, 2, 3, 4]}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item.toString()}
+              renderItem={() => <TopVenuesSkeleton />}
+            />
+          ) : (
+            <FlatList
+              data={topVenues}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => <TopVenues venue={item} />}
+            />
+          )}
+        </View>
       </View>
     </View>
   );
