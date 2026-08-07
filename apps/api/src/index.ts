@@ -4,6 +4,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { userRoutes } from "./routes/user-routes.js";
 import { ENV } from "./config/env.js";
 import { destinationsRoutes } from "./routes/destinations-routes.js";
+import { venuesRoutes } from "./routes/venues-route.js";
 
 const app = express();
 const port = ENV.PORT;
@@ -27,6 +28,7 @@ app.get("/health", (req, res: Response<API_RESPONSE_T>) => {
 
 app.use("/user", userRoutes);
 app.use("/destinations", destinationsRoutes);
+app.use("/venues", venuesRoutes);
 
 app.listen(port, () => {
   console.log(`server started on http://localhost:${port}`);
