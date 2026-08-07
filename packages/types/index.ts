@@ -55,3 +55,18 @@ export type TopVenuesSchema_T = z.infer<typeof TopVenuesSchema>;
 export type GetTopVenuesResponse_T = {
   data: TopVenuesSchema_T[];
 };
+
+//
+
+export const TopEventsSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  coverImage: z.string().nullable(),
+  rating: z.string(),
+  reviewCount: z.number(),
+  lowestPrice: z.string(),
+});
+export type TopEventsSchema_T = z.infer<typeof TopEventsSchema>;
+export type GetTopEventsResponse_T = {
+  data: TopEventsSchema_T[];
+};
