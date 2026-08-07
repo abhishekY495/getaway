@@ -28,3 +28,15 @@ export const CodeSchema = z.object({
   code: z.string().min(1, "Code is required"),
 });
 export type CodeSchema_T = z.infer<typeof CodeSchema>;
+
+//
+
+export const TopDestinationsSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  coverImage: z.string(),
+});
+export type TopDestinationsSchema_T = z.infer<typeof TopDestinationsSchema>;
+export type GetTopDestinationsResponse_T = {
+  data: TopDestinationsSchema_T[];
+};
