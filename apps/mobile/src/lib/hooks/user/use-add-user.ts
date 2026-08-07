@@ -7,7 +7,6 @@ export const useAddUser = () => {
 
   return useMutation({
     mutationFn: (token: string) => addUser(token),
-    
     onSuccess: () => {
       setTimeout(() => {
         router.replace("/(tabs)");
