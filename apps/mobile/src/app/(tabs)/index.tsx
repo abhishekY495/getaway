@@ -3,8 +3,8 @@ import {
   StyleSheet,
   FlatList,
   Text,
-  TouchableOpacity,
   BackHandler,
+  Pressable,
 } from "react-native";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { LinearGradient } from "expo-linear-gradient";
@@ -67,11 +67,11 @@ export default function ExploreScreen() {
                 colors={["transparent", "#11111190", "#11111190"]}
                 style={StyleSheet.absoluteFill}
               />
-              <TouchableOpacity onPress={openSearch}>
+              <Pressable onPress={openSearch}>
                 <Text className="border border-neutral-200 mx-4 p-4 text-neutral-400 rounded-lg fixed top-[200px] bg-white shadow-2xl">
                   Search for events, places and more...
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
             {/*  */}
             <View className="fles gap-14 mt-16 mx-4">
