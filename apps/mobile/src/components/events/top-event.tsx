@@ -10,7 +10,7 @@ export default function TopEvent({ event }: { event: TopEventsSchema_T }) {
   }).format(event.reviewCount);
 
   return (
-    <View className="items-start justify-start mx-2 gap-1">
+    <View className="items-start justify-start mx-3 my-4 gap-1">
       <Image
         style={{ height: 100, width: "100%", borderRadius: 5 }}
         source={event.coverImage}
@@ -26,7 +26,10 @@ export default function TopEvent({ event }: { event: TopEventsSchema_T }) {
         <Text className="text-sm text-[#E5006E]">{formattedReviewCount}</Text>
       </View>
       <Text className="font-semibold">{event.title}</Text>
-      <Text className="font-semibold">From ₹{event.lowestPrice}</Text>
+      <View>
+        <Text className="text-sm">from</Text>
+        <Text className="text-sm font-medium">${event.lowestPrice}</Text>
+      </View>
     </View>
   );
 }
