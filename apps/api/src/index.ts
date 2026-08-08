@@ -6,12 +6,12 @@ import { ENV } from "./config/env.js";
 import { destinationsRoutes } from "./routes/destinations-routes.js";
 import { venuesRoutes } from "./routes/venues-route.js";
 import { eventsRoutes } from "./routes/events-routes.js";
+import { search } from "./controller/search-controller.js";
 
 const app = express();
 const port = ENV.PORT;
 
 app.use(express.json());
-app.use(clerkMiddleware());
 
 app.get("/", (req, res: Response<API_RESPONSE_T>) => {
   res.json({
@@ -26,6 +26,10 @@ app.get("/health", (req, res: Response<API_RESPONSE_T>) => {
     statusMessage: "API Running",
   });
 });
+
+app.use(clerkMiddleware());
+
+app.post("/search", search);
 
 app.use("/user", userRoutes);
 app.use("/destinations", destinationsRoutes);

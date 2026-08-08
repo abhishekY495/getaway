@@ -70,3 +70,33 @@ export type TopEventsSchema_T = z.infer<typeof TopEventsSchema>;
 export type GetTopEventsResponse_T = {
   data: TopEventsSchema_T[];
 };
+
+//
+
+export const searchSchema = z.object({
+  destinations: z.array(
+    z.object({ id: z.number(), name: z.string(), coverImage: z.string() }),
+  ),
+  venues: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      coverImage: z.string(),
+      rating: z.string(),
+      reviewCount: z.number(),
+    }),
+  ),
+  events: z.array(
+    z.object({
+      id: z.number(),
+      title: z.string(),
+      coverImage: z.string().nullable(),
+      rating: z.string(),
+      reviewCount: z.number(),
+    }),
+  ),
+});
+export type searchSchema_T = z.infer<typeof searchSchema>;
+export type searchResponse_T = {
+  data: searchSchema_T;
+};
