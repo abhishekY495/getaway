@@ -1,9 +1,10 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type { Request, Response } from "express";
-import type { searchResponse_T } from "@repo/types";
+import type { SearchResponse_T } from "@repo/types";
 import { db } from "../config/db.js";
 import {
   citiesTable,
+  countriesTable,
   eventImagesTable,
   eventsTable,
   venuesTable,
@@ -12,7 +13,7 @@ import { and, eq, ilike } from "drizzle-orm";
 
 export const search = async (
   req: Request,
-  res: Response<searchResponse_T | { error: string }>,
+  res: Response<SearchResponse_T | { error: string }>,
 ) => {
   try {
     const { isAuthenticated, userId } = getAuth(req);
@@ -42,9 +43,11 @@ export const search = async (
         .select({
           id: citiesTable.id,
           name: citiesTable.name,
+          country: countriesTable.name,
           coverImage: citiesTable.coverImage,
         })
         .from(citiesTable)
+        .innerJoin(countriesTable, eq(citiesTable.countryId, countriesTable.id))
         .where(ilike(citiesTable.name, searchTerm))
         .limit(5),
 

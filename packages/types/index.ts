@@ -73,9 +73,14 @@ export type GetTopEventsResponse_T = {
 
 //
 
-export const searchSchema = z.object({
+export const SearchSchema = z.object({
   destinations: z.array(
-    z.object({ id: z.number(), name: z.string(), coverImage: z.string() }),
+    z.object({
+      id: z.number(),
+      name: z.string(),
+      country: z.string(),
+      coverImage: z.string(),
+    }),
   ),
   venues: z.array(
     z.object({
@@ -96,7 +101,7 @@ export const searchSchema = z.object({
     }),
   ),
 });
-export type searchSchema_T = z.infer<typeof searchSchema>;
-export type searchResponse_T = {
-  data: searchSchema_T;
+export type SearchSchema_T = z.infer<typeof SearchSchema>;
+export type SearchResponse_T = {
+  data: SearchSchema_T;
 };
