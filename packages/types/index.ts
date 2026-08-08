@@ -128,3 +128,17 @@ export type GetCityEventsResponse_T = {
     events: CityEventSchema_T[];
   };
 };
+
+//
+
+export const VenueSchema = z.object({
+  name: z.string(),
+  coverImage: z.string(),
+});
+export type VenueSchema_T = z.infer<typeof VenueSchema>;
+export type GetVenueEventsResponse_T = {
+  data: {
+    venue: VenueSchema_T;
+    events: CityEventSchema_T[];
+  };
+};

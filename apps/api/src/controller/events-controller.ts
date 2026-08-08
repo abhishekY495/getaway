@@ -10,6 +10,7 @@ import {
 import type {
   GetCityEventsResponse_T,
   GetTopEventsResponse_T,
+  GetVenueEventsResponse_T,
 } from "@repo/types";
 import { and, desc, eq } from "drizzle-orm";
 
@@ -113,6 +114,69 @@ export const getCityEvents = async (
     res.json({
       data: {
         city: city[0],
+        events,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+export const getVenueEvents = async (
+  req: Request,
+  res: Response<GetVenueEventsResponse_T | { error: string }>,
+) => {
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
+
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    const venueId = Number(req.params.venueId);
+
+    const venue = await db
+      .select({
+        name: venuesTable.name,
+        coverImage: venuesTable.coverImage,
+      })
+      .from(venuesTable)
+      .where(eq(venuesTable.id, venueId))
+      .limit(1);
+
+    if (!venue[0]) {
+      throw new Error("Venue not found");
+    }
+
+    const events = await db
+      .select({
+        id: eventsTable.id,
+        title: eventsTable.title,
+        coverImage: eventImagesTable.url,
+        rating: eventsTable.rating,
+        reviewCount: eventsTable.reviewCount,
+        lowestPrice: eventsTable.adultPrice,
+      })
+      .from(eventsTable)
+      .leftJoin(
+        eventImagesTable,
+        and(
+          eq(eventImagesTable.eventId, eventsTable.id),
+          eq(eventImagesTable.isCover, true),
+        ),
+      )
+      .where(eq(eventsTable.venueId, venueId));
+
+    res.json({
+      data: {
+        venue: venue[0],
         events,
       },
     });
