@@ -1,6 +1,6 @@
 import { useGetTopEvents } from "@/lib/hooks/events/use-get-top-events";
 import { View, Text, ActivityIndicator } from "react-native";
-import TopEvent from "./top-event";
+import Event from "./event";
 
 export default function TopEventsSection() {
   const { data, isLoading } = useGetTopEvents();
@@ -18,7 +18,7 @@ export default function TopEventsSection() {
           <View className="flex-row flex-wrap">
             {topEvents.map((event) => (
               <View key={event.id} className="w-1/2">
-                <TopEvent event={event} />
+                <Event event={event} />
               </View>
             ))}
           </View>

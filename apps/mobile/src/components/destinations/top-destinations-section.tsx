@@ -7,6 +7,8 @@ export default function TopDestinationsSection() {
   const { data, isLoading } = useGetTopDestinations();
   const destinations = data?.data;
 
+  console.log(123, destinations);
+
   return (
     <View>
       <Text className="font-black text-2xl mb-3">World's top destinations</Text>
