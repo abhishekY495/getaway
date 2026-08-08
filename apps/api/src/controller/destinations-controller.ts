@@ -9,27 +9,31 @@ export const getTopDestinations = async (
   req: Request,
   res: Response<GetTopDestinationsResponse_T | { error: string }>,
 ) => {
-  const { isAuthenticated, userId } = getAuth(req);
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
 
-  if (!isAuthenticated) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    const destinations = await db
+      .select({
+        id: citiesTable.id,
+        name: citiesTable.name,
+        coverImage: citiesTable.coverImage,
+      })
+      .from(citiesTable)
+      .orderBy(asc(citiesTable.name));
+
+    res.json({ data: destinations });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
   }
-
-  const user = await clerkClient.users.getUser(userId);
-  if (!user) {
-    res.status(401).json({ error: "User does not exist" });
-    return;
-  }
-
-  const destinations = await db
-    .select({
-      id: citiesTable.id,
-      name: citiesTable.name,
-      coverImage: citiesTable.coverImage,
-    })
-    .from(citiesTable)
-    .orderBy(asc(citiesTable.name));
-
-  res.json({ data: destinations });
 };

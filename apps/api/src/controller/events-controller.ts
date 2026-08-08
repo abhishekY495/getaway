@@ -9,38 +9,42 @@ export const getTopEvents = async (
   req: Request,
   res: Response<GetTopEventsResponse_T | { error: string }>,
 ) => {
-  const { isAuthenticated, userId } = getAuth(req);
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
 
-  if (!isAuthenticated) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    const events = await db
+      .select({
+        id: eventsTable.id,
+        title: eventsTable.title,
+        rating: eventsTable.rating,
+        reviewCount: eventsTable.reviewCount,
+        lowestPrice: eventsTable.adultPrice,
+        coverImage: eventImagesTable.url,
+      })
+      .from(eventsTable)
+      .leftJoin(
+        eventImagesTable,
+        and(
+          eq(eventImagesTable.eventId, eventsTable.id),
+          eq(eventImagesTable.isCover, true),
+        ),
+      )
+      .orderBy(desc(eventsTable.rating), desc(eventsTable.reviewCount))
+      .limit(10);
+
+    res.json({ data: events });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
   }
-
-  const user = await clerkClient.users.getUser(userId);
-  if (!user) {
-    res.status(401).json({ error: "User does not exist" });
-    return;
-  }
-
-  const events = await db
-    .select({
-      id: eventsTable.id,
-      title: eventsTable.title,
-      rating: eventsTable.rating,
-      reviewCount: eventsTable.reviewCount,
-      lowestPrice: eventsTable.adultPrice,
-      coverImage: eventImagesTable.url,
-    })
-    .from(eventsTable)
-    .leftJoin(
-      eventImagesTable,
-      and(
-        eq(eventImagesTable.eventId, eventsTable.id),
-        eq(eventImagesTable.isCover, true),
-      ),
-    )
-    .orderBy(desc(eventsTable.rating), desc(eventsTable.reviewCount))
-    .limit(10);
-
-  res.json({ data: events });
 };

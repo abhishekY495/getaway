@@ -9,31 +9,35 @@ export const getTopVenues = async (
   req: Request,
   res: Response<GetTopVenuesResponse_T | { error: string }>,
 ) => {
-  const { isAuthenticated, userId } = getAuth(req);
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
 
-  if (!isAuthenticated) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    const venues = await db
+      .select({
+        id: venuesTable.id,
+        name: venuesTable.name,
+        coverImage: venuesTable.coverImage,
+        description: venuesTable.description,
+        rating: venuesTable.rating,
+        reviewCount: venuesTable.reviewCount,
+      })
+      .from(venuesTable)
+      .orderBy(desc(venuesTable.rating), desc(venuesTable.reviewCount))
+      .limit(10);
+
+    res.json({ data: venues });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
   }
-
-  const user = await clerkClient.users.getUser(userId);
-  if (!user) {
-    res.status(401).json({ error: "User does not exist" });
-    return;
-  }
-
-  const venues = await db
-    .select({
-      id: venuesTable.id,
-      name: venuesTable.name,
-      coverImage: venuesTable.coverImage,
-      description: venuesTable.description,
-      rating: venuesTable.rating,
-      reviewCount: venuesTable.reviewCount,
-    })
-    .from(venuesTable)
-    .orderBy(desc(venuesTable.rating), desc(venuesTable.reviewCount))
-    .limit(10);
-
-  res.json({ data: venues });
 };

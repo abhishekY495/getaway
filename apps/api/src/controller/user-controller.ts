@@ -5,24 +5,28 @@ import { usersTable } from "../db/schema.js";
 import { eq } from "drizzle-orm";
 
 export const myInfo = async (req: Request, res: Response) => {
-  const { isAuthenticated, userId } = getAuth(req);
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
 
-  if (!isAuthenticated) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    res.json({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.emailAddresses[0]?.emailAddress,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
   }
-
-  const user = await clerkClient.users.getUser(userId);
-  if (!user) {
-    res.status(401).json({ error: "User does not exist" });
-    return;
-  }
-
-  res.json({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.emailAddresses[0]?.emailAddress,
-  });
 };
 
 export const addUser = async (req: Request, res: Response) => {
