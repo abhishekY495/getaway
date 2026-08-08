@@ -11,7 +11,7 @@ export default function SearchedDestinations({
     <View className="gap-3">
       {destinations.map((destination) => {
         return (
-          <View className="flex-row gap-2">
+          <View className="flex-row gap-2" key={destination.id}>
             <Image
               source={destination.coverImage}
               style={{ height: 40, width: 40, borderRadius: 5 }}

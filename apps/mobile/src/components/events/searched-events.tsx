@@ -1,3 +1,4 @@
+import { formatReviewCount } from "@/utils/format-review-count";
 import { SearchResponse_T } from "@repo/types";
 import { Image } from "expo-image";
 import { StarIcon } from "lucide-react-native";
@@ -11,13 +12,8 @@ export default function SearchedEvents({
   return (
     <View className="gap-3">
       {events.map((event) => {
-        const formattedReviewCount = new Intl.NumberFormat("en", {
-          notation: "compact",
-          maximumFractionDigits: 0,
-        }).format(event.reviewCount);
-
         return (
-          <View className="flex-row gap-2">
+          <View className="flex-row gap-2" key={event.id}>
             <Image
               source={event.coverImage}
               style={{ height: 40, width: 40, borderRadius: 5 }}
@@ -33,7 +29,7 @@ export default function SearchedEvents({
                   </Text>
                 </View>
                 <Text className="text-xs text-[#E5006E]">
-                  {formattedReviewCount}
+                  {formatReviewCount(event.reviewCount)}
                 </Text>
               </View>
             </View>

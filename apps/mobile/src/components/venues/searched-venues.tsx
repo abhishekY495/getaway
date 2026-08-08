@@ -1,3 +1,4 @@
+import { formatReviewCount } from "@/utils/format-review-count";
 import { SearchResponse_T } from "@repo/types";
 import { Image } from "expo-image";
 import { StarIcon } from "lucide-react-native";
@@ -11,13 +12,8 @@ export default function SearchedVenues({
   return (
     <View className="gap-3">
       {venues.map((venue) => {
-        const formattedReviewCount = new Intl.NumberFormat("en", {
-          notation: "compact",
-          maximumFractionDigits: 0,
-        }).format(venue.reviewCount);
-
         return (
-          <View className="flex-row gap-2">
+          <View className="flex-row gap-2" key={venue.id}>
             <Image
               source={venue.coverImage}
               style={{ height: 40, width: 40, borderRadius: 5 }}
@@ -33,7 +29,7 @@ export default function SearchedVenues({
                   </Text>
                 </View>
                 <Text className="text-xs text-[#E5006E]">
-                  {formattedReviewCount}
+                  {formatReviewCount(venue.reviewCount)}
                 </Text>
               </View>
             </View>
