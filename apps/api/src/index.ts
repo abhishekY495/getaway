@@ -29,7 +29,7 @@ app.get("/health", (req, res: Response<API_RESPONSE_T>) => {
 
 app.use(clerkMiddleware());
 
-app.post("/search", search);
+app.get("/search", search);
 
 app.use("/user", userRoutes);
 app.use("/destinations", destinationsRoutes);
