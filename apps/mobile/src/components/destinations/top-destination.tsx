@@ -1,11 +1,11 @@
-import { TopDestinationsSchema_T } from "@repo/types";
+import { TopDestinationSchema_T } from "@repo/types";
 import { Image } from "expo-image";
 import { View, Text } from "react-native";
 
 export default function TopDestination({
   destination,
 }: {
-  destination: TopDestinationsSchema_T;
+  destination: TopDestinationSchema_T;
 }) {
   return (
     <View className="flex-1 items-center justify-center mx-2 gap-1">

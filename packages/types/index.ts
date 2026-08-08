@@ -31,19 +31,19 @@ export type CodeSchema_T = z.infer<typeof CodeSchema>;
 
 //
 
-export const TopDestinationsSchema = z.object({
+export const TopDestinationSchema = z.object({
   id: z.number(),
   name: z.string(),
   coverImage: z.string(),
 });
-export type TopDestinationsSchema_T = z.infer<typeof TopDestinationsSchema>;
+export type TopDestinationSchema_T = z.infer<typeof TopDestinationSchema>;
 export type GetTopDestinationsResponse_T = {
-  data: TopDestinationsSchema_T[];
+  data: TopDestinationSchema_T[];
 };
 
 //
 
-export const TopVenuesSchema = z.object({
+export const TopVenueSchema = z.object({
   id: z.number(),
   name: z.string(),
   coverImage: z.string(),
@@ -51,14 +51,14 @@ export const TopVenuesSchema = z.object({
   rating: z.string(),
   reviewCount: z.number(),
 });
-export type TopVenuesSchema_T = z.infer<typeof TopVenuesSchema>;
+export type TopVenueSchema_T = z.infer<typeof TopVenueSchema>;
 export type GetTopVenuesResponse_T = {
-  data: TopVenuesSchema_T[];
+  data: TopVenueSchema_T[];
 };
 
 //
 
-export const TopEventsSchema = z.object({
+export const TopEventSchema = z.object({
   id: z.number(),
   title: z.string(),
   coverImage: z.string().nullable(),
@@ -66,9 +66,9 @@ export const TopEventsSchema = z.object({
   reviewCount: z.number(),
   lowestPrice: z.string(),
 });
-export type TopEventsSchema_T = z.infer<typeof TopEventsSchema>;
+export type TopEventSchema_T = z.infer<typeof TopEventSchema>;
 export type GetTopEventsResponse_T = {
-  data: TopEventsSchema_T[];
+  data: TopEventSchema_T[];
 };
 
 //

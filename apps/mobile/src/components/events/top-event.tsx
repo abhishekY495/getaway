@@ -1,9 +1,9 @@
-import { TopEventsSchema_T } from "@repo/types";
+import { TopEventSchema_T } from "@repo/types";
 import { Image } from "expo-image";
 import { StarIcon } from "lucide-react-native";
 import { View, Text } from "react-native";
 
-export default function TopEvent({ event }: { event: TopEventsSchema_T }) {
+export default function TopEvent({ event }: { event: TopEventSchema_T }) {
   const formattedReviewCount = new Intl.NumberFormat("en", {
     notation: "compact",
     maximumFractionDigits: 0,
