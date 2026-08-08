@@ -1,8 +1,16 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type { Request, Response } from "express";
 import { db } from "../config/db.js";
-import { eventImagesTable, eventsTable } from "../db/schema.js";
-import type { GetTopEventsResponse_T } from "@repo/types";
+import {
+  citiesTable,
+  eventImagesTable,
+  eventsTable,
+  venuesTable,
+} from "../db/schema.js";
+import type {
+  GetCityEventsResponse_T,
+  GetTopEventsResponse_T,
+} from "@repo/types";
 import { and, desc, eq } from "drizzle-orm";
 
 export const getTopEvents = async (
@@ -44,6 +52,70 @@ export const getTopEvents = async (
       .limit(10);
 
     res.json({ data: events });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+export const getCityEvents = async (
+  req: Request,
+  res: Response<GetCityEventsResponse_T | { error: string }>,
+) => {
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
+
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    const cityId = Number(req.params.cityId);
+
+    const city = await db
+      .select({
+        name: citiesTable.name,
+        coverImage: citiesTable.coverImage,
+      })
+      .from(citiesTable)
+      .where(eq(citiesTable.id, cityId))
+      .limit(1);
+
+    if (!city[0]) {
+      throw new Error("City not found");
+    }
+
+    const events = await db
+      .select({
+        id: eventsTable.id,
+        title: eventsTable.title,
+        coverImage: eventImagesTable.url,
+        rating: eventsTable.rating,
+        reviewCount: eventsTable.reviewCount,
+        lowestPrice: eventsTable.adultPrice,
+      })
+      .from(eventsTable)
+      .innerJoin(venuesTable, eq(eventsTable.venueId, venuesTable.id))
+      .leftJoin(
+        eventImagesTable,
+        and(
+          eq(eventImagesTable.eventId, eventsTable.id),
+          eq(eventImagesTable.isCover, true),
+        ),
+      )
+      .where(eq(venuesTable.cityId, cityId));
+
+    res.json({
+      data: {
+        city: city[0],
+        events,
+      },
+    });
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });
   }

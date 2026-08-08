@@ -105,3 +105,26 @@ export type SearchSchema_T = z.infer<typeof SearchSchema>;
 export type SearchResponse_T = {
   data: SearchSchema_T;
 };
+
+//
+
+export const CityEventSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  coverImage: z.string().nullable(),
+  rating: z.string(),
+  reviewCount: z.number(),
+  lowestPrice: z.string(),
+});
+export const CitySchema = z.object({
+  name: z.string(),
+  coverImage: z.string(),
+});
+export type CitySchema_T = z.infer<typeof CitySchema>;
+export type CityEventSchema_T = z.infer<typeof CityEventSchema>;
+export type GetCityEventsResponse_T = {
+  data: {
+    city: CitySchema_T;
+    events: CityEventSchema_T[];
+  };
+};
