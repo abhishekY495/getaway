@@ -2,15 +2,18 @@ import { TopVenueSchema_T } from "@repo/types";
 import { View, Text } from "react-native";
 import { Image } from "expo-image";
 import { StarIcon } from "lucide-react-native";
+import { Pressable } from "react-native";
+import { useRouter } from "expo-router";
+import { formatReviewCount } from "@/utils/format-review-count";
 
 export default function TopVenue({ venue }: { venue: TopVenueSchema_T }) {
-  const formattedReviewCount = new Intl.NumberFormat("en", {
-    notation: "compact",
-    maximumFractionDigits: 0,
-  }).format(venue.reviewCount);
+  const router = useRouter();
 
   return (
-    <View className="items-start justify-start mx-2 gap-1 w-44">
+    <Pressable
+      onPress={() => router.push(`/venue/${venue.id}`)}
+      className="items-start justify-start mx-2 gap-1 w-44"
+    >
       <Image
         style={{ height: 200, width: "100%", borderRadius: 5 }}
         source={venue.coverImage}
@@ -23,9 +26,11 @@ export default function TopVenue({ venue }: { venue: TopVenueSchema_T }) {
             {venue.rating} •
           </Text>
         </View>
-        <Text className="text-sm text-[#E5006E]">{formattedReviewCount}</Text>
+        <Text className="text-sm text-[#E5006E]">
+          {formatReviewCount(venue.reviewCount)}
+        </Text>
       </View>
       <Text className="font-semibold">{venue.name}</Text>
-    </View>
+    </Pressable>
   );
 }
