@@ -1,6 +1,7 @@
 import { API_URL } from "@/utils/constants";
 import {
   GetCityEventsResponse_T,
+  GetEventResponse_T,
   GetTopEventsResponse_T,
   GetVenueEventsResponse_T,
 } from "@repo/types";
@@ -49,6 +50,26 @@ export const getVenueEvents = async (
   venueId: number,
 ): Promise<GetVenueEventsResponse_T> => {
   const response = await fetch(`${API_URL}/events/by-venue/${venueId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Something went wrong");
+  }
+
+  return data;
+};
+
+export const getEvent = async (
+  token: string,
+  eventId: number,
+): Promise<GetEventResponse_T> => {
+  const response = await fetch(`${API_URL}/events/${eventId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
