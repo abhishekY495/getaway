@@ -9,10 +9,11 @@ import {
 } from "../db/schema.js";
 import type {
   GetCityEventsResponse_T,
+  GetEventResponse_T,
   GetTopEventsResponse_T,
   GetVenueEventsResponse_T,
 } from "@repo/types";
-import { and, desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 
 export const getTopEvents = async (
   req: Request,
@@ -179,6 +180,67 @@ export const getVenueEvents = async (
         venue: venue[0],
         events,
       },
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+export const getEvent = async (
+  req: Request,
+  res: Response<GetEventResponse_T | { error: string }>,
+) => {
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
+
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    const eventId = Number(req.params.eventId);
+
+    const event = await db
+      .select({
+        title: eventsTable.title,
+        venue: venuesTable.name,
+        operatingHours: eventsTable.operatingHours,
+        rating: eventsTable.rating,
+        reviewCount: eventsTable.reviewCount,
+        adultPrice: eventsTable.adultPrice,
+        childPrice: eventsTable.childPrice,
+        highlights: eventsTable.highlights,
+        inclusions: eventsTable.inclusions,
+        exclusions: eventsTable.exclusions,
+        cancellationPolicy: eventsTable.cancellationPolicy,
+        mealsIncluded: eventsTable.mealsIncluded,
+        bookNowPayLater: eventsTable.bookNowPayLater,
+      })
+      .from(eventsTable)
+      .innerJoin(venuesTable, eq(eventsTable.venueId, venuesTable.id))
+      .where(eq(eventsTable.id, eventId))
+      .limit(1);
+
+    if (!event[0]) {
+      throw new Error("Event not found");
+    }
+
+    const eventImages = await db
+      .select({
+        url: eventImagesTable.url,
+      })
+      .from(eventImagesTable)
+      .where(eq(eventImagesTable.eventId, eventId))
+      .orderBy(asc(eventImagesTable.order));
+
+    res.json({
+      data: { ...event[0], images: eventImages.map((image) => image.url) },
     });
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });

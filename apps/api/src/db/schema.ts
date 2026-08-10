@@ -110,7 +110,9 @@ export const eventsTable = pgTable("events", {
   rating: numeric("rating", {
     precision: 2,
     scale: 1,
-  }).default("0").notNull(),
+  })
+    .default("0")
+    .notNull(),
   reviewCount: integer("review_count").default(0).notNull(),
   adultPrice: numeric("adult_price", {
     precision: 10,
@@ -120,13 +122,13 @@ export const eventsTable = pgTable("events", {
     precision: 10,
     scale: 2,
   }).notNull(),
-  highlights: jsonb("highlights").$type<string[]>().default([]),
-  inclusions: jsonb("inclusions").$type<string[]>().default([]),
-  exclusions: jsonb("exclusions").$type<string[]>().default([]),
-  cancellationPolicy: text("cancellation_policy"),
-  isFeatured: boolean("is_featured").default(false),
-  mealsIncluded: boolean("meals_included").default(false),
-  bookNowPayLater: boolean("book_now_pay_later").default(false),
+  highlights: jsonb("highlights").$type<string[]>().default([]).notNull(),
+  inclusions: jsonb("inclusions").$type<string[]>().default([]).notNull(),
+  exclusions: jsonb("exclusions").$type<string[]>().default([]).notNull(),
+  cancellationPolicy: text("cancellation_policy").notNull(),
+  isFeatured: boolean("is_featured").default(false).notNull(),
+  mealsIncluded: boolean("meals_included").default(false).notNull(),
+  bookNowPayLater: boolean("book_now_pay_later").default(false).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -141,8 +143,8 @@ export const eventImagesTable = pgTable("event_images", {
     .references(() => eventsTable.id)
     .notNull(),
   url: text("url").notNull(),
-  isCover: boolean("is_cover").default(false),
-  order: integer("order").default(0),
+  isCover: boolean("is_cover").default(false).notNull(),
+  order: integer("order").default(0).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),

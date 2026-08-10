@@ -142,3 +142,31 @@ export type GetVenueEventsResponse_T = {
     events: CityEventSchema_T[];
   };
 };
+
+//
+
+export const OperatingHourSchema = z.object({
+  open: z.string(),
+  close: z.string(),
+});
+
+export const EventSchema = z.object({
+  title: z.string(),
+  venue: z.string(),
+  images: z.array(z.string()),
+  operatingHours: z.array(OperatingHourSchema),
+  rating: z.string(),
+  reviewCount: z.number(),
+  adultPrice: z.string(),
+  childPrice: z.string(),
+  highlights: z.array(z.string()),
+  inclusions: z.array(z.string()),
+  exclusions: z.array(z.string()),
+  cancellationPolicy: z.string(),
+  mealsIncluded: z.boolean(),
+  bookNowPayLater: z.boolean(),
+});
+export type EventSchema_T = z.infer<typeof EventSchema>;
+export type GetEventResponse_T = {
+  data: EventSchema_T;
+};
