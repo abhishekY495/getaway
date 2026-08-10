@@ -12,7 +12,7 @@ import TopDestinationsSection from "@/components/destinations/top-destinations-s
 import TopVenuesSection from "@/components/venues/top-venues-section";
 import TopEventsSection from "@/components/events/top-events-section";
 import { useEffect, useRef, useState } from "react";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Search from "@/components/search";
 
 const videoSource = require("@/assets/hero-video.mp4");
