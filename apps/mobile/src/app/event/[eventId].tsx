@@ -1,6 +1,9 @@
+import EventAccordian from "@/components/events/event/event-accordian";
+import EventFooter from "@/components/events/event/event-footer";
+import EventHero from "@/components/events/event/event-hero";
+import EventOperatingHours from "@/components/events/event/event-operating-hours";
+import EventOverview from "@/components/events/event/event-overview";
 import { useGetEvent } from "@/lib/hooks/events/use-get-event";
-import { Image } from "expo-image";
-import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ArrowLeftIcon } from "lucide-react-native";
 import { useState } from "react";
@@ -57,7 +60,6 @@ export default function EventScreen() {
 
   return (
     <View className="flex-1 bg-white">
-      {/* Sticky header */}
       <Animated.View
         style={headerStyle}
         className="absolute top-0 left-0 right-0 z-50 bg-white border-b border-neutral-300 shadow-2xl flex-row items-center gap-2 p-3"
@@ -71,7 +73,6 @@ export default function EventScreen() {
         </Text>
       </Animated.View>
 
-      {/* Content */}
       <ScrollView
         scrollEventThrottle={16}
         onScroll={(event) => {
@@ -82,61 +83,21 @@ export default function EventScreen() {
           }
         }}
       >
-        <View>
-          <Image
-            source={event.images[0]}
-            contentFit="cover"
-            style={{
-              width: "100%",
-              height: 350,
-            }}
+        <EventHero event={event} />
+
+        <View className="p-4">
+          <EventOverview
+            bookNowPayLater={event.bookNowPayLater}
+            mealsIncluded={event.mealsIncluded}
           />
-          <LinearGradient
-            colors={[
-              "transparent",
-              "#00000050",
-              "#00000050",
-              "#000000",
-              "#000000",
-            ]}
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: 180,
-            }}
-          />
-          <Pressable
-            onPress={() => router.back()}
-            className="bg-white absolute top-3 left-3 p-3 rounded-full"
-          >
-            <ArrowLeftIcon size={18} />
-          </Pressable>
-          <Text className="font-black text-2xl absolute text-white bottom-4 left-5">
-            {event.title}
-          </Text>
-        </View>
-        {/*  */}
-        <View className="px-3 py-2 pb-20">
-          <Text>Your long event content goes here...</Text>
-          <Text>{event.highlights}</Text>
-          <Text>{event.inclusions}</Text>
-          <Text>{event.exclusions}</Text>
-          <Text>{event.highlights}</Text>
-          <Text>{event.inclusions}</Text>
-          <Text>{event.exclusions}</Text>
-          <Text>{event.highlights}</Text>
-          <Text>{event.inclusions}</Text>
-          <Text>{event.exclusions}</Text>
-          <Text>{event.highlights}</Text>
-          <Text>{event.inclusions}</Text>
-          <Text>{event.exclusions}</Text>
-          <Text>{event.highlights}</Text>
-          <Text>{event.inclusions}</Text>
-          <Text>{event.exclusions}</Text>
+          <EventAccordian heading="Highlights" items={event.highlights} />
+          <EventAccordian heading="Inclusions" items={event.inclusions} />
+          <EventAccordian heading="Exclusions" items={event.exclusions} />
+          <EventOperatingHours hours={event.operatingHours} />
         </View>
       </ScrollView>
+
+      <EventFooter event={event} />
     </View>
   );
 }
