@@ -146,9 +146,11 @@ export type GetVenueEventsResponse_T = {
 //
 
 export const OperatingHourSchema = z.object({
+  day: z.string(),
   open: z.string(),
   close: z.string(),
 });
+export type OperatingHourSchema_T = z.infer<typeof OperatingHourSchema>;
 
 export const EventSchema = z.object({
   title: z.string(),
