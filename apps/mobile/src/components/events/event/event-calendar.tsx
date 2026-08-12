@@ -24,7 +24,13 @@ const maxDate = new Date(today.getFullYear(), today.getMonth() + 10, 0);
 const todayId = toDateId(today);
 const maxDateId = toDateId(maxDate);
 
-export default function EventCalendar({ event }: { event: EventSchema_T }) {
+export default function EventCalendar({
+  event,
+  onContinue,
+}: {
+  event: EventSchema_T;
+  onContinue: (date: string) => void;
+}) {
   const [selectedDate, setSelectedDate] = useState(todayId);
   const { weekDaysList } = useCalendar({ calendarMonthId: todayId });
 
@@ -69,7 +75,7 @@ export default function EventCalendar({ event }: { event: EventSchema_T }) {
       <Pressable
         className="bg-purple-600 rounded-xl p-4 mb-12 mx-5"
         onPress={() => {
-          console.log("Booking:", selectedDate);
+          onContinue(selectedDate);
         }}
       >
         <Text className="text-white text-center font-black">Continue</Text>
