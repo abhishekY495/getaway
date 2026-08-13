@@ -1,6 +1,6 @@
 import { useBookEvent } from "@/lib/hooks/events/use-book-event";
 import { useUser } from "@clerk/expo";
-import { Redirect } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   View,
@@ -25,6 +25,7 @@ export default function GuestDetails({
 }) {
   const { user } = useUser();
   const { mutate, isPending } = useBookEvent();
+  const router = useRouter();
 
   const [bookingData, setBookingData] = useState({
     fullName: "",
@@ -53,8 +54,12 @@ export default function GuestDetails({
       },
       {
         onSuccess: (data) => {
-          console.log(data.bookingId);
-          console.log(data.bookingReference);
+          router.replace({
+            pathname: "/booking/success-booking",
+            params: {
+              bookingReference: data.bookingReference,
+            },
+          });
         },
         onError: (error) => {
           console.log(error);
