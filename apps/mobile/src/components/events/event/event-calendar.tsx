@@ -47,30 +47,32 @@ export default function EventCalendar({
         ))}
       </View>
 
-      <Calendar.List
-        calendarInitialMonthId={todayId}
-        calendarMinDateId={todayId}
-        calendarMaxDateId={maxDateId}
-        calendarDayHeight={CALENDAR_DAY_HEIGHT}
-        calendarRowHorizontalSpacing={CALENDAR_ROW_H_SPACING}
-        onCalendarDayPress={setSelectedDate}
-        calendarActiveDateRanges={[
-          {
-            startId: selectedDate,
-            endId: selectedDate,
-          },
-        ]}
-        CalendarScrollComponent={CalendarScrollComponent}
-        renderItem={({ item }) => (
-          <View className="px-5">
-            <EventCalendarMonth
-              calendarMonthId={item.id}
-              price={event.adultPrice}
-              {...item.calendarProps}
-            />
-          </View>
-        )}
-      />
+      <View className="flex-1">
+        <Calendar.List
+          calendarInitialMonthId={todayId}
+          calendarMinDateId={todayId}
+          calendarMaxDateId={maxDateId}
+          calendarDayHeight={CALENDAR_DAY_HEIGHT}
+          calendarRowHorizontalSpacing={CALENDAR_ROW_H_SPACING}
+          onCalendarDayPress={setSelectedDate}
+          calendarActiveDateRanges={[
+            {
+              startId: selectedDate,
+              endId: selectedDate,
+            },
+          ]}
+          CalendarScrollComponent={CalendarScrollComponent}
+          renderItem={({ item }) => (
+            <View className="px-5">
+              <EventCalendarMonth
+                calendarMonthId={item.id}
+                price={event.adultPrice}
+                {...item.calendarProps}
+              />
+            </View>
+          )}
+        />
+      </View>
 
       <Pressable
         className="bg-purple-600 rounded-xl p-4 mb-12 mx-5"

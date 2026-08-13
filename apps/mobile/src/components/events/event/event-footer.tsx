@@ -8,15 +8,20 @@ import EventBookingSelection from "./event-booking-selection";
 export default function EventFooter({ event }: { event: EventSchema_T }) {
   const calendarSheetRef = useRef<BottomSheetModal>(null);
   const bookingSheetRef = useRef<BottomSheetModal>(null);
+  const pendingBookingRef = useRef(false);
 
-  const [sheetIndex, setSheetIndex] = useState(-1);
+  const [calendarSheetIndex, setCalendarSheetIndex] = useState(-1);
+  const [bookingSheetIndex, setBookingSheetIndex] = useState(-1);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
     const handleBackButton = () => {
-      if (sheetIndex !== -1) {
-        calendarSheetRef.current?.dismiss();
+      if (bookingSheetIndex !== -1) {
         bookingSheetRef.current?.dismiss();
+        return true;
+      }
+      if (calendarSheetIndex !== -1) {
+        calendarSheetRef.current?.dismiss();
         return true;
       }
       return false;
@@ -26,14 +31,13 @@ export default function EventFooter({ event }: { event: EventSchema_T }) {
       "hardwareBackPress",
       handleBackButton,
     );
-
     return () => subscription.remove();
-  }, [sheetIndex]);
+  }, [calendarSheetIndex, bookingSheetIndex]);
 
   const handleContinue = (date: string) => {
     setSelectedDate(date);
+    pendingBookingRef.current = true;
     calendarSheetRef.current?.dismiss();
-    bookingSheetRef.current?.present();
   };
 
   return (
@@ -61,7 +65,15 @@ export default function EventFooter({ event }: { event: EventSchema_T }) {
         snapPoints={["80%"]}
         enablePanDownToClose
         enableDynamicSizing={false}
-        onChange={setSheetIndex}
+        onChange={setCalendarSheetIndex}
+        onDismiss={() => {
+          if (pendingBookingRef.current) {
+            pendingBookingRef.current = false;
+            requestAnimationFrame(() => {
+              bookingSheetRef.current?.present();
+            });
+          }
+        }}
         backdropComponent={(props) => (
           <BottomSheetBackdrop
             {...props}
@@ -75,24 +87,25 @@ export default function EventFooter({ event }: { event: EventSchema_T }) {
       </BottomSheetModal>
 
       {/* Booking selection */}
-      {selectedDate && (
-        <BottomSheetModal
-          ref={bookingSheetRef}
-          snapPoints={["45%"]}
-          enablePanDownToClose
-          enableDynamicSizing={false}
-          backdropComponent={(props) => (
-            <BottomSheetBackdrop
-              {...props}
-              appearsOnIndex={0}
-              disappearsOnIndex={-1}
-              opacity={0.4}
-            />
-          )}
-        >
+      <BottomSheetModal
+        ref={bookingSheetRef}
+        snapPoints={["45%"]}
+        enablePanDownToClose
+        enableDynamicSizing={false}
+        onChange={setBookingSheetIndex}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop
+            {...props}
+            appearsOnIndex={0}
+            disappearsOnIndex={-1}
+            opacity={0.4}
+          />
+        )}
+      >
+        {selectedDate && (
           <EventBookingSelection selectedDate={selectedDate} event={event} />
-        </BottomSheetModal>
-      )}
+        )}
+      </BottomSheetModal>
     </>
   );
 }

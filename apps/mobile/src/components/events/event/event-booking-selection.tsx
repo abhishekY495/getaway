@@ -60,7 +60,7 @@ export default function EventBookingSelection({
           </View>
           <View className="flex-1 items-end">
             <Text className="text-neutral-700 font-semibold">
-              ${event.adultPrice}
+              ${Number(event.adultPrice).toFixed(2)}
             </Text>
           </View>
         </View>
@@ -87,14 +87,14 @@ export default function EventBookingSelection({
           </View>
           <View className="flex-1 items-end">
             <Text className="text-neutral-700 font-semibold">
-              ${event.childPrice}
+              ${Number(event.childPrice).toFixed(2)}
             </Text>
           </View>
         </View>
         {/*  */}
         <View className="flex-row justify-between items-center py-5">
           <Text className="text-xl font-bold">Total payable</Text>
-          <Text className="text-xl font-bold">${total}</Text>
+          <Text className="text-xl font-bold">${total.toFixed(2)}</Text>
         </View>
       </View>
 
@@ -107,7 +107,7 @@ export default function EventBookingSelection({
               adultQuantity: adultQuantity.toString(),
               childQuantity: childQuantity.toString(),
               selectedDate,
-              eventTitle: event.title,
+              event: JSON.stringify(event),
             },
           })
         }
