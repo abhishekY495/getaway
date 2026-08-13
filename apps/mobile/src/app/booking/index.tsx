@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, ScrollView, Pressable } from "react-native";
-import { EventSchema_T, ParsedEvent_T } from "@repo/types";
+import { View, Text, Pressable } from "react-native";
+import { ParsedEvent_T } from "@repo/types";
 import { useState } from "react";
 import Animated, {
   useAnimatedStyle,
@@ -11,6 +11,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import Ticket from "@/components/booking/ticket";
 import GuestDetails from "@/components/booking/guest-details";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 export default function BookingScreen() {
   const { adultQuantity, childQuantity, selectedDate, total, event } =
@@ -55,7 +56,7 @@ export default function BookingScreen() {
         </Text>
       </Animated.View>
 
-      <ScrollView
+      <KeyboardAwareScrollView
         scrollEventThrottle={16}
         onScroll={(event) => {
           const y = event.nativeEvent.contentOffset.y;
@@ -96,14 +97,13 @@ export default function BookingScreen() {
             event={parsedEvent}
           />
         </View>
-        <GuestDetails />
-      </ScrollView>
-
-      <Pressable onPress={() => {}} className="p-5">
-        <Text className="text-center text-lg text-white font-black bg-purple-600 p-3 rounded-lg">
-          Pay ${Number(total).toFixed(2)}
-        </Text>
-      </Pressable>
+        <GuestDetails
+          adultQuantity={Number(adultQuantity)}
+          childQuantity={Number(childQuantity)}
+          selectedDate={selectedDate}
+          total={total}
+        />
+      </KeyboardAwareScrollView>
     </View>
   );
 }
