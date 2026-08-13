@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  bookEvent,
   getCityEvents,
   getEvent,
   getTopEvents,
@@ -12,3 +13,4 @@ eventsRoutes.get("/top", getTopEvents);
 eventsRoutes.get("/by-city/:cityId", getCityEvents);
 eventsRoutes.get("/by-venue/:venueId", getVenueEvents);
 eventsRoutes.get("/:eventId", getEvent);
+eventsRoutes.post("/book/:eventId", bookEvent);

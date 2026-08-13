@@ -2,16 +2,20 @@ import { clerkClient, getAuth } from "@clerk/express";
 import type { Request, Response } from "express";
 import { db } from "../config/db.js";
 import {
+  bookingItemsTable,
+  bookingsTable,
   citiesTable,
   eventImagesTable,
   eventsTable,
   venuesTable,
 } from "../db/schema.js";
-import type {
-  GetCityEventsResponse_T,
-  GetEventResponse_T,
-  GetTopEventsResponse_T,
-  GetVenueEventsResponse_T,
+import {
+  BookingSchema,
+  type BookingSchemaResponse_T,
+  type GetCityEventsResponse_T,
+  type GetEventResponse_T,
+  type GetTopEventsResponse_T,
+  type GetVenueEventsResponse_T,
 } from "@repo/types";
 import { and, asc, desc, eq } from "drizzle-orm";
 
@@ -242,6 +246,134 @@ export const getEvent = async (
 
     res.json({
       data: { ...event[0], images: eventImages.map((image) => image.url) },
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
+export const bookEvent = async (
+  req: Request,
+  res: Response<BookingSchemaResponse_T | { error: string }>,
+) => {
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
+
+    if (!isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    if (!user) {
+      res.status(401).json({ error: "User does not exist" });
+      return;
+    }
+
+    const eventId = Number(req.params.eventId);
+    if (!eventId) {
+      throw new Error("Invalid event Id");
+    }
+
+    const result = BookingSchema.safeParse(req.body);
+    if (!result.success) {
+      res.status(400).json({
+        error: "Invalid booking details",
+      });
+      return;
+    }
+
+    const { visitDate, adultQuantity, childQuantity } = result.data;
+
+    if (adultQuantity + childQuantity === 0) {
+      res.status(400).json({
+        error: "At least one ticket is required",
+      });
+      return;
+    }
+
+    const [event] = await db
+      .select()
+      .from(eventsTable)
+      .where(eq(eventsTable.id, eventId))
+      .limit(1);
+    if (!event) {
+      res.status(404).json({
+        error: "Event not found",
+      });
+      return;
+    }
+
+    const parsedVisitDate = new Date(visitDate);
+    if (Number.isNaN(parsedVisitDate.getTime())) {
+      res.status(400).json({
+        error: "Invalid visit date",
+      });
+      return;
+    }
+
+    const adultPrice = Number(event.adultPrice);
+    const childPrice = Number(event.childPrice);
+
+    const adultSubtotal = adultQuantity * adultPrice;
+    const childSubtotal = childQuantity * childPrice;
+    const totalAmount = adultSubtotal + childSubtotal;
+
+    const bookingReference = `GTW-${Date.now()}-${crypto
+      .randomUUID()
+      .slice(0, 4)
+      .toUpperCase()}`;
+
+    const booking = await db.transaction(async (tx) => {
+      const [newBooking] = await tx
+        .insert(bookingsTable)
+        .values({
+          bookingReference,
+          userId: Number(userId),
+          eventId,
+          totalAmount: totalAmount.toFixed(2),
+          currency: "USD",
+          paymentStatus: "paid",
+          bookingStatus: "completed",
+          visitDate: parsedVisitDate,
+        })
+        .returning();
+
+      if (!newBooking) {
+        throw new Error("Failed to create booking");
+      }
+      const bookingItems = [];
+
+      if (adultQuantity > 0) {
+        bookingItems.push({
+          bookingId: newBooking.id,
+          ticketType: "adult" as const,
+          quantity: adultQuantity,
+          pricePerTicket: adultPrice.toFixed(2),
+          subTotal: adultSubtotal.toFixed(2),
+        });
+      }
+
+      if (childQuantity > 0) {
+        bookingItems.push({
+          bookingId: newBooking.id,
+          ticketType: "child" as const,
+          quantity: childQuantity,
+          pricePerTicket: childPrice.toFixed(2),
+          subTotal: childSubtotal.toFixed(2),
+        });
+      }
+
+      if (bookingItems.length > 0) {
+        await tx.insert(bookingItemsTable).values(bookingItems);
+      }
+
+      return newBooking;
+    });
+
+    res.status(201).json({
+      bookingId: booking.id,
+      bookingReference: booking.bookingReference,
     });
   } catch (error) {
     res.status(500).json({ error: "Something went wrong" });

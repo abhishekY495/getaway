@@ -181,3 +181,18 @@ export type ParsedEvent_T = {
   title: string;
   coverImage: string;
 };
+
+//
+
+export const BookingSchema = z.object({
+  visitDate: z.iso.date(),
+  adultQuantity: z.number().int().nonnegative(),
+  childQuantity: z.number().int().nonnegative(),
+});
+export type BookingSchema_T = z.infer<typeof BookingSchema>;
+
+export const BookingSchemaResponse = z.object({
+  bookingId: z.number,
+  bookingReference: z.string(),
+});
+export type BookingSchemaResponse_T = z.infer<typeof BookingSchemaResponse>;
