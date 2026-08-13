@@ -21,7 +21,7 @@ export default function Ticket({
   const month = date.toLocaleDateString("en-US", { month: "short" });
 
   return (
-    <View className="absolute left-1/2 top-1/4 -translate-x-1/2 bg-white rounded-lg">
+    <View className="absolute left-1/2 top-[35%] -translate-x-1/2 bg-white rounded-lg">
       <View className="flex-row items-start gap-3 p-5 border border-neutral-300">
         <View className="items-center justify-center border border-neutral-300 px-3 py-2 rounded-lg">
           <Text className="text-lg text-red-600 font-semibold">{month}</Text>

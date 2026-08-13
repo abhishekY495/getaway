@@ -10,6 +10,7 @@ import { ArrowLeftIcon } from "lucide-react-native";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import Ticket from "@/components/booking/ticket";
+import GuestDetails from "@/components/booking/guest-details";
 
 export default function BookingScreen() {
   const { adultQuantity, childQuantity, selectedDate, total, event } =
@@ -68,7 +69,7 @@ export default function BookingScreen() {
         <View className="flex-1">
           <Image
             source={parsedEvent.coverImage}
-            style={{ height: 250, width: "100%" }}
+            style={{ height: 300, width: "100%" }}
             contentFit="cover"
           />
           <LinearGradient
@@ -81,6 +82,12 @@ export default function BookingScreen() {
               height: 200,
             }}
           />
+          <Pressable
+            onPress={() => router.back()}
+            className="bg-neutral-100 absolute top-3 left-3 p-3 rounded-full"
+          >
+            <ArrowLeftIcon size={18} />
+          </Pressable>
           <Ticket
             adultQuantity={Number(adultQuantity)}
             childQuantity={Number(childQuantity)}
@@ -89,9 +96,7 @@ export default function BookingScreen() {
             event={parsedEvent}
           />
         </View>
-        <View className="p-4 py-3">
-          <Text className="text-2xl font-black">Guest details</Text>
-        </View>
+        <GuestDetails />
       </ScrollView>
 
       <Pressable onPress={() => {}} className="p-5">
