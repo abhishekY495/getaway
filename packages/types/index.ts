@@ -153,6 +153,7 @@ export const OperatingHourSchema = z.object({
 export type OperatingHourSchema_T = z.infer<typeof OperatingHourSchema>;
 
 export const EventSchema = z.object({
+  id: z.number(),
   title: z.string(),
   venue: z.string(),
   images: z.array(z.string()),

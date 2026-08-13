@@ -208,6 +208,7 @@ export const getEvent = async (
 
     const event = await db
       .select({
+        id: eventsTable.id,
         title: eventsTable.title,
         venue: venuesTable.name,
         operatingHours: eventsTable.operatingHours,
