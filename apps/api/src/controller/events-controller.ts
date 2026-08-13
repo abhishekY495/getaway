@@ -7,7 +7,9 @@ import {
   citiesTable,
   eventImagesTable,
   eventsTable,
+  usersTable,
   venuesTable,
+  type BookingItem,
 } from "../db/schema.js";
 import {
   BookingSchema,
@@ -270,6 +272,19 @@ export const bookEvent = async (
       return;
     }
 
+    const [dbUser] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.clerkId, userId))
+      .limit(1);
+
+    if (!dbUser) {
+      res.status(404).json({
+        error: "User does not exist",
+      });
+      return;
+    }
+
     const eventId = Number(req.params.eventId);
     if (!eventId) {
       res.status(400).json({ error: "Invalid event Id" });
@@ -325,58 +340,55 @@ export const bookEvent = async (
       .slice(0, 4)
       .toUpperCase()}`;
 
-    const booking = await db.transaction(async (tx) => {
-      const [newBooking] = await tx
-        .insert(bookingsTable)
-        .values({
-          bookingReference,
-          userId: Number(userId),
-          eventId,
-          totalAmount: totalAmount.toFixed(2),
-          currency: "USD",
-          paymentStatus: "paid",
-          bookingStatus: "completed",
-          visitDate: parsedVisitDate,
-        })
-        .returning();
+    const [newBooking] = await db
+      .insert(bookingsTable)
+      .values({
+        bookingReference,
+        userId: dbUser.id,
+        eventId,
+        totalAmount: totalAmount.toFixed(2),
+        currency: "USD",
+        paymentStatus: "paid",
+        bookingStatus: "completed",
+        visitDate: parsedVisitDate,
+      })
+      .returning();
 
-      if (!newBooking) {
-        throw new Error("Failed to create booking");
-      }
-      const bookingItems = [];
+    if (!newBooking) {
+      throw new Error("Failed to create booking");
+    }
 
-      if (adultQuantity > 0) {
-        bookingItems.push({
-          bookingId: newBooking.id,
-          ticketType: "adult" as const,
-          quantity: adultQuantity,
-          pricePerTicket: adultPrice.toFixed(2),
-          subTotal: adultSubtotal.toFixed(2),
-        });
-      }
+    const bookingItems: BookingItem[] = [];
 
-      if (childQuantity > 0) {
-        bookingItems.push({
-          bookingId: newBooking.id,
-          ticketType: "child" as const,
-          quantity: childQuantity,
-          pricePerTicket: childPrice.toFixed(2),
-          subTotal: childSubtotal.toFixed(2),
-        });
-      }
+    if (adultQuantity > 0) {
+      bookingItems.push({
+        bookingId: newBooking.id,
+        ticketType: "adult",
+        quantity: adultQuantity,
+        pricePerTicket: adultPrice.toFixed(2),
+        subTotal: adultSubtotal.toFixed(2),
+      });
+    }
+    if (childQuantity > 0) {
+      bookingItems.push({
+        bookingId: newBooking.id,
+        ticketType: "child",
+        quantity: childQuantity,
+        pricePerTicket: childPrice.toFixed(2),
+        subTotal: childSubtotal.toFixed(2),
+      });
+    }
 
-      if (bookingItems.length > 0) {
-        await tx.insert(bookingItemsTable).values(bookingItems);
-      }
-
-      return newBooking;
-    });
+    if (bookingItems.length > 0) {
+      await db.insert(bookingItemsTable).values(bookingItems);
+    }
 
     res.status(201).json({
-      bookingId: booking.id,
-      bookingReference: booking.bookingReference,
+      bookingId: newBooking.id,
+      bookingReference: newBooking.bookingReference,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Something went wrong" });
   }
 };

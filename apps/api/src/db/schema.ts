@@ -29,6 +29,7 @@ type OperatingHour = {
   open: string;
   close: string;
 };
+export type BookingItem = typeof bookingItemsTable.$inferInsert;
 
 //
 
