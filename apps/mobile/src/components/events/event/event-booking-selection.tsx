@@ -40,7 +40,7 @@ export default function EventBookingSelection({
         {/*  */}
         <View className="flex-row items-center border-b border-dashed border-neutral-300 py-5">
           <View className="flex-1">
-            <Text className="text-xl font-bold">Adult</Text>
+            <Text className="font-bold">Adult</Text>
             <Text className="text-sm text-neutral-500 -mt-1">Above 15 yrs</Text>
           </View>
           <View className="flex-1 flex-row items-center justify-center gap-5">
@@ -67,7 +67,7 @@ export default function EventBookingSelection({
         {/*  */}
         <View className="flex-row items-center border-b border-dashed border-neutral-300 py-5">
           <View className="flex-1">
-            <Text className="text-xl font-bold">Child</Text>
+            <Text className="font-bold">Child</Text>
             <Text className="text-sm text-neutral-500 -mt-1">2 to 14 yrs</Text>
           </View>
           <View className="flex-1 flex-row items-center justify-center gap-5">
@@ -107,7 +107,12 @@ export default function EventBookingSelection({
               adultQuantity: adultQuantity.toString(),
               childQuantity: childQuantity.toString(),
               selectedDate,
-              event: JSON.stringify(event),
+              total: String(total),
+              event: JSON.stringify({
+                id: event.id,
+                title: event.title,
+                coverImage: event.images[0],
+              }),
             },
           })
         }

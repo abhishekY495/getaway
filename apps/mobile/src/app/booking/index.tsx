@@ -1,26 +1,104 @@
-import { useLocalSearchParams } from "expo-router";
-import { View, Text } from "react-native";
-import { EventSchema_T } from "@repo/types";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { View, Text, ScrollView, Pressable } from "react-native";
+import { EventSchema_T, ParsedEvent_T } from "@repo/types";
+import { useState } from "react";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import { ArrowLeftIcon } from "lucide-react-native";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import Ticket from "@/components/booking/ticket";
 
 export default function BookingScreen() {
-  const { adultQuantity, childQuantity, selectedDate, event } =
+  const { adultQuantity, childQuantity, selectedDate, total, event } =
     useLocalSearchParams<{
       adultQuantity: string;
       childQuantity: string;
       selectedDate: string;
+      total: string;
       event: string;
     }>();
+  const router = useRouter();
+  const [isSticky, setIsSticky] = useState(false);
+  const parsedEvent = JSON.parse(event) as ParsedEvent_T;
 
-  const parsedEvent = JSON.parse(event) as EventSchema_T;
+  const headerStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(isSticky ? 1 : 0, {
+        duration: 200,
+      }),
+      transform: [
+        {
+          translateY: withTiming(isSticky ? 0 : -10, {
+            duration: 300,
+          }),
+        },
+      ],
+    };
+  });
 
   return (
-    <View>
-      <Text>BookingScreen</Text>
-      <Text>Adults: {adultQuantity}</Text>
-      <Text>Children: {childQuantity}</Text>
-      <Text>Date: {selectedDate}</Text>
-      <Text>Event: {parsedEvent.id}</Text>
-      <Text>Event: {parsedEvent.title}</Text>
+    <View className="flex-1 bg-white">
+      <Animated.View
+        style={headerStyle}
+        className="absolute top-0 left-0 right-0 z-50 bg-white border-b border-neutral-300 shadow-2xl flex-row items-center gap-2 p-3"
+        pointerEvents={isSticky ? "auto" : "none"}
+      >
+        <Pressable onPress={() => router.back()}>
+          <ArrowLeftIcon size={18} />
+        </Pressable>
+        <Text numberOfLines={1} className="flex-1 text-lg font-semibold">
+          Review and Pay
+        </Text>
+      </Animated.View>
+
+      <ScrollView
+        scrollEventThrottle={16}
+        onScroll={(event) => {
+          const y = event.nativeEvent.contentOffset.y;
+          const sticky = y >= 300;
+          if (sticky !== isSticky) {
+            setIsSticky(sticky);
+          }
+        }}
+        className="bg-white flex-1"
+      >
+        <View className="flex-1">
+          <Image
+            source={parsedEvent.coverImage}
+            style={{ height: 250, width: "100%" }}
+            contentFit="cover"
+          />
+          <LinearGradient
+            colors={["transparent", "#00000050", "#000000"]}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 200,
+            }}
+          />
+          <Ticket
+            adultQuantity={Number(adultQuantity)}
+            childQuantity={Number(childQuantity)}
+            selectedDate={selectedDate}
+            total={total}
+            event={parsedEvent}
+          />
+        </View>
+        <View className="p-4 py-3">
+          <Text className="text-2xl font-black">Guest details</Text>
+        </View>
+      </ScrollView>
+
+      <Pressable onPress={() => {}} className="p-5">
+        <Text className="text-center text-lg text-white font-black bg-purple-600 p-3 rounded-lg">
+          Pay ${Number(total).toFixed(2)}
+        </Text>
+      </Pressable>
     </View>
   );
 }

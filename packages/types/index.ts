@@ -173,3 +173,11 @@ export type EventSchema_T = z.infer<typeof EventSchema>;
 export type GetEventResponse_T = {
   data: EventSchema_T;
 };
+
+//
+
+export type ParsedEvent_T = {
+  id: string;
+  title: string;
+  coverImage: string;
+};
