@@ -272,7 +272,8 @@ export const bookEvent = async (
 
     const eventId = Number(req.params.eventId);
     if (!eventId) {
-      throw new Error("Invalid event Id");
+      res.status(400).json({ error: "Invalid event Id" });
+      return;
     }
 
     const result = BookingSchema.safeParse(req.body);
