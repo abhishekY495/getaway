@@ -98,6 +98,7 @@ export default function BookingScreen() {
           />
         </View>
         <GuestDetails
+          eventId={Number(parsedEvent.id)}
           adultQuantity={Number(adultQuantity)}
           childQuantity={Number(childQuantity)}
           selectedDate={selectedDate}

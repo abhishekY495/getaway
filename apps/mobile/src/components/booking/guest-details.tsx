@@ -1,20 +1,30 @@
+import { useBookEvent } from "@/lib/hooks/events/use-book-event";
 import { useUser } from "@clerk/expo";
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 
 export default function GuestDetails({
+  eventId,
   adultQuantity,
-  childQuantity,
+  childQuantity = 0,
   selectedDate,
   total,
 }: {
+  eventId: number;
   adultQuantity: number;
-  childQuantity?: number;
+  childQuantity: number;
   selectedDate: string;
   total: string;
 }) {
   const { user } = useUser();
+  const { mutate, isPending } = useBookEvent();
 
   const [bookingData, setBookingData] = useState({
     fullName: "",
@@ -30,6 +40,28 @@ export default function GuestDetails({
     bookingData.mobileNumber.trim().length === 10 &&
     bookingData.cardNumber.trim().length === 16 &&
     bookingData.cvv.trim().length === 3;
+
+  const handlePayPress = () => {
+    mutate(
+      {
+        eventId,
+        bookingData: {
+          adultQuantity,
+          childQuantity: childQuantity,
+          visitDate: selectedDate,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          console.log(data.bookingId);
+          console.log(data.bookingReference);
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      },
+    );
+  };
 
   useEffect(() => {
     if (user) {
@@ -133,13 +165,17 @@ export default function GuestDetails({
         </View>
       </View>
       <Pressable
-        onPress={() => {}}
+        onPress={handlePayPress}
         disabled={!isFormValid}
         className={`rounded-lg m-5 ${!isFormValid ? "bg-neutral-400" : "bg-purple-600"}`}
       >
-        <Text className="text-center text-lg text-white font-black p-3">
-          Pay ${Number(total).toFixed(2)}
-        </Text>
+        {isPending ? (
+          <ActivityIndicator color="white" className="p-[13px]" />
+        ) : (
+          <Text className="text-center text-lg text-white font-black p-3">
+            Pay ${Number(total).toFixed(2)}
+          </Text>
+        )}
       </Pressable>
     </>
   );

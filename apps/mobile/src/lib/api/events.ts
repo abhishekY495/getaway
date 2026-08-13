@@ -1,5 +1,7 @@
 import { API_URL } from "@/utils/constants";
 import {
+  BookingSchema_T,
+  BookingSchemaResponse_T,
   GetCityEventsResponse_T,
   GetEventResponse_T,
   GetTopEventsResponse_T,
@@ -74,6 +76,29 @@ export const getEvent = async (
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Something went wrong");
+  }
+
+  return data;
+};
+
+export const bookEvent = async (
+  token: string,
+  eventId: number,
+  bookingData: BookingSchema_T,
+): Promise<BookingSchemaResponse_T> => {
+  const response = await fetch(`${API_URL}/events/${eventId}/book`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(bookingData),
   });
 
   const data = await response.json();
