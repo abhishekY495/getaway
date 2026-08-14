@@ -4,13 +4,13 @@ import { View, Text } from "react-native";
 
 export default function Ticket({
   adultQuantity,
-  childQuantity,
+  childQuantity = 0,
   selectedDate,
   total,
   event,
 }: {
   adultQuantity: number;
-  childQuantity?: number;
+  childQuantity: number;
   selectedDate: string;
   total: string;
   event: ParsedEvent_T;
@@ -44,7 +44,7 @@ export default function Ticket({
                 {adultQuantity} adult
               </Text>
             </View>
-            {childQuantity && (
+            {childQuantity > 0 && (
               <View className="flex-row gap-1 items-center">
                 <BabyIcon color="#5c5c5c" size={14} />
                 <Text className="text-neutral-500 font-medium text-sm">

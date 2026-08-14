@@ -130,7 +130,7 @@ export default function GuestDetails({
           />
         </View>
         {/*  */}
-        <View className="w-full border-b border-dashed border-neutral-300 mt-5 my-4"></View>
+        <View className="w-full border-b border-dashed border-neutral-300 mt-5 my-4" />
         {/*  */}
         <View className="gap-1">
           <Text className="text-sm font-medium text-neutral-500">
