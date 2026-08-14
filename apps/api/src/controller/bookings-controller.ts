@@ -42,6 +42,7 @@ export const getBookings = async (
       .select({
         bookingReference: bookingsTable.bookingReference,
         visitDate: bookingsTable.visitDate,
+        eventId: eventsTable.id,
         eventTitle: eventsTable.title,
         eventCoverImage: eventImagesTable.url,
         totalAmount: bookingsTable.totalAmount,
@@ -62,12 +63,18 @@ export const getBookings = async (
         eq(bookingItemsTable.bookingId, bookingsTable.id),
       )
       .where(eq(bookingsTable.userId, dbUser.id))
-      .groupBy(bookingsTable.id, eventsTable.title, eventImagesTable.url)
+      .groupBy(
+        bookingsTable.id,
+        eventsTable.id,
+        eventsTable.title,
+        eventImagesTable.url,
+      )
       .orderBy(desc(bookingsTable.createdAt));
 
     const bookings: AllBookingsSchema_T[] = bookingRows.map((row) => ({
       bookingReference: row.bookingReference,
       visitDate: row.visitDate.toISOString(),
+      eventId: row.eventId,
       eventTitle: row.eventTitle,
       eventCoverImage: row.eventCoverImage,
       adultQuantity: Number(row.adultQuantity),
