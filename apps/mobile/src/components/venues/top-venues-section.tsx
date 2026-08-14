@@ -9,7 +9,7 @@ export default function TopVenuesSection() {
 
   return (
     <View>
-      <Text className="font-black text-2xl mb-3">World's top destinations</Text>
+      <Text className="font-black text-2xl mb-3">Top attractions globally</Text>
       {isLoading ? (
         <FlatList
           data={[1, 2, 3, 4, 5]}
