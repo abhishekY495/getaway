@@ -196,3 +196,19 @@ export const BookingSchemaResponse = z.object({
   bookingReference: z.string(),
 });
 export type BookingSchemaResponse_T = z.infer<typeof BookingSchemaResponse>;
+
+//
+
+export const AllBookingsSchema = z.object({
+  bookingReference: z.string(),
+  visitDate: z.string(),
+  eventTitle: z.string(),
+  eventCoverImage: z.string().nullable(),
+  adultQuantity: z.number(),
+  childQuantity: z.number(),
+  totalAmount: z.string(),
+});
+export type AllBookingsSchema_T = z.infer<typeof AllBookingsSchema>;
+export type AllBookingsSchemaResponse_T = {
+  data: AllBookingsSchema_T[];
+};
