@@ -199,7 +199,7 @@ export type BookingSchemaResponse_T = z.infer<typeof BookingSchemaResponse>;
 
 //
 
-export const AllBookingsSchema = z.object({
+export const UserBookingSchema = z.object({
   bookingReference: z.string(),
   visitDate: z.string(),
   eventId: z.number(),
@@ -209,7 +209,7 @@ export const AllBookingsSchema = z.object({
   childQuantity: z.number(),
   totalAmount: z.string(),
 });
-export type AllBookingsSchema_T = z.infer<typeof AllBookingsSchema>;
-export type AllBookingsSchemaResponse_T = {
-  data: AllBookingsSchema_T[];
+export type UserBookingSchema_T = z.infer<typeof UserBookingSchema>;
+export type UserBookingSchemaResponse_T = {
+  data: UserBookingSchema_T[];
 };

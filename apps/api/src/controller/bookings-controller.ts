@@ -1,7 +1,7 @@
-import { clerkClient, getAuth } from "@clerk/express";
+import { getAuth } from "@clerk/express";
 import type {
-  AllBookingsSchema_T,
-  AllBookingsSchemaResponse_T,
+  UserBookingSchema_T,
+  UserBookingSchemaResponse_T,
 } from "@repo/types";
 import type { Request, Response } from "express";
 import {
@@ -16,7 +16,7 @@ import { db } from "../config/db.js";
 
 export const getBookings = async (
   req: Request,
-  res: Response<AllBookingsSchemaResponse_T | { error: string }>,
+  res: Response<UserBookingSchemaResponse_T | { error: string }>,
 ) => {
   try {
     const { isAuthenticated, userId } = getAuth(req);
@@ -71,7 +71,7 @@ export const getBookings = async (
       )
       .orderBy(desc(bookingsTable.createdAt));
 
-    const bookings: AllBookingsSchema_T[] = bookingRows.map((row) => ({
+    const bookings: UserBookingSchema_T[] = bookingRows.map((row) => ({
       bookingReference: row.bookingReference,
       visitDate: row.visitDate.toISOString(),
       eventId: row.eventId,

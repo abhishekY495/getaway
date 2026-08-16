@@ -1,9 +1,9 @@
 import { API_URL } from "@/utils/constants";
-import { AllBookingsSchemaResponse_T } from "@repo/types";
+import { UserBookingSchemaResponse_T } from "@repo/types";
 
 export const getBookings = async (
   token: string,
-): Promise<AllBookingsSchemaResponse_T> => {
+): Promise<UserBookingSchemaResponse_T> => {
   const response = await fetch(`${API_URL}/bookings`, {
     headers: {
       Authorization: `Bearer ${token}`,

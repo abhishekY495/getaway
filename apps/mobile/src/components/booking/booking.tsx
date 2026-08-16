@@ -1,11 +1,11 @@
-import { AllBookingsSchema_T } from "@repo/types";
+import { UserBookingSchema_T } from "@repo/types";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { BabyIcon, UserIcon } from "lucide-react-native";
 import { View, Text, Pressable } from "react-native";
 
-export default function Booking({ booking }: { booking: AllBookingsSchema_T }) {
+export default function Booking({ booking }: { booking: UserBookingSchema_T }) {
   const router = useRouter();
   const date = new Date(booking.visitDate);
   const weekDay = date.toLocaleDateString("en-US", { weekday: "short" });
