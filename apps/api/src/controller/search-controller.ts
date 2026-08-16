@@ -1,15 +1,9 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type { Request, Response } from "express";
 import type { SearchResponse_T } from "@repo/types";
-import { db } from "../config/db.js";
-import {
-  citiesTable,
-  countriesTable,
-  eventImagesTable,
-  eventsTable,
-  venuesTable,
-} from "../db/schema.js";
-import { and, eq, ilike } from "drizzle-orm";
+import { searchDestinationsService } from "../services/destination-service.js";
+import { searchEventsService } from "../services/event-service.js";
+import { searchVenuesService } from "../services/venue-service.js";
 
 export const search = async (
   req: Request,
@@ -38,51 +32,9 @@ export const search = async (
     const searchTerm = `%${query}%`;
 
     const [destinations, venues, events] = await Promise.all([
-      // Destinations
-      db
-        .select({
-          id: citiesTable.id,
-          name: citiesTable.name,
-          country: countriesTable.name,
-          coverImage: citiesTable.coverImage,
-        })
-        .from(citiesTable)
-        .innerJoin(countriesTable, eq(citiesTable.countryId, countriesTable.id))
-        .where(ilike(citiesTable.name, searchTerm))
-        .limit(5),
-
-      // Venues
-      db
-        .select({
-          id: venuesTable.id,
-          name: venuesTable.name,
-          coverImage: venuesTable.coverImage,
-          rating: venuesTable.rating,
-          reviewCount: venuesTable.reviewCount,
-        })
-        .from(venuesTable)
-        .where(ilike(venuesTable.name, searchTerm))
-        .limit(5),
-
-      // Events
-      db
-        .select({
-          id: eventsTable.id,
-          title: eventsTable.title,
-          coverImage: eventImagesTable.url,
-          rating: eventsTable.rating,
-          reviewCount: eventsTable.reviewCount,
-        })
-        .from(eventsTable)
-        .leftJoin(
-          eventImagesTable,
-          and(
-            eq(eventImagesTable.eventId, eventsTable.id),
-            eq(eventImagesTable.isCover, true),
-          ),
-        )
-        .where(ilike(eventsTable.title, searchTerm))
-        .limit(5),
+      await searchDestinationsService(searchTerm),
+      await searchVenuesService(searchTerm),
+      await searchEventsService(searchTerm),
     ]);
 
     res.json({ data: { destinations, venues, events } });

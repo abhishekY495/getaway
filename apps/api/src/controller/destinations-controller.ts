@@ -1,9 +1,7 @@
 import { clerkClient, getAuth } from "@clerk/express";
 import type { Request, Response } from "express";
-import { db } from "../config/db.js";
-import { citiesTable } from "../db/schema.js";
 import type { GetTopDestinationsResponse_T } from "@repo/types";
-import { asc } from "drizzle-orm";
+import { getTopDestinationsService } from "../services/destination-service.js";
 
 export const getTopDestinations = async (
   req: Request,
@@ -23,14 +21,7 @@ export const getTopDestinations = async (
       return;
     }
 
-    const destinations = await db
-      .select({
-        id: citiesTable.id,
-        name: citiesTable.name,
-        coverImage: citiesTable.coverImage,
-      })
-      .from(citiesTable)
-      .orderBy(asc(citiesTable.name));
+    const destinations = await getTopDestinationsService();
 
     res.json({ data: destinations });
   } catch (error) {

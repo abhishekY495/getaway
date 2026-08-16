@@ -4,15 +4,8 @@ import type {
   UserBookingSchemaResponse_T,
 } from "@repo/types";
 import type { Request, Response } from "express";
-import {
-  bookingItemsTable,
-  bookingsTable,
-  eventImagesTable,
-  eventsTable,
-  usersTable,
-} from "../db/schema.js";
-import { and, desc, eq, sql } from "drizzle-orm";
-import { db } from "../config/db.js";
+import { getUserService } from "../services/user-service.js";
+import { getBookingsService } from "../services/booking-service.js";
 
 export const getBookings = async (
   req: Request,
@@ -25,51 +18,13 @@ export const getBookings = async (
       return;
     }
 
-    const [dbUser] = await db
-      .select({
-        id: usersTable.id,
-      })
-      .from(usersTable)
-      .where(eq(usersTable.clerkId, userId))
-      .limit(1);
-
+    const dbUser = await getUserService(userId);
     if (!dbUser) {
       res.status(404).json({ error: "User does not exist" });
       return;
     }
 
-    const bookingRows = await db
-      .select({
-        bookingReference: bookingsTable.bookingReference,
-        visitDate: bookingsTable.visitDate,
-        eventId: eventsTable.id,
-        eventTitle: eventsTable.title,
-        eventCoverImage: eventImagesTable.url,
-        totalAmount: bookingsTable.totalAmount,
-        adultQuantity: sql<number>`COALESCE(SUM(CASE WHEN ${bookingItemsTable.ticketType} = 'adult' THEN ${bookingItemsTable.quantity} ELSE 0 END), 0)`,
-        childQuantity: sql<number>`COALESCE(SUM(CASE WHEN ${bookingItemsTable.ticketType} = 'child' THEN ${bookingItemsTable.quantity} ELSE 0 END), 0)`,
-      })
-      .from(bookingsTable)
-      .innerJoin(eventsTable, eq(bookingsTable.eventId, eventsTable.id))
-      .leftJoin(
-        eventImagesTable,
-        and(
-          eq(eventImagesTable.eventId, eventsTable.id),
-          eq(eventImagesTable.isCover, true),
-        ),
-      )
-      .leftJoin(
-        bookingItemsTable,
-        eq(bookingItemsTable.bookingId, bookingsTable.id),
-      )
-      .where(eq(bookingsTable.userId, dbUser.id))
-      .groupBy(
-        bookingsTable.id,
-        eventsTable.id,
-        eventsTable.title,
-        eventImagesTable.url,
-      )
-      .orderBy(desc(bookingsTable.createdAt));
+    const bookingRows = await getBookingsService(dbUser.id);
 
     const bookings: UserBookingSchema_T[] = bookingRows.map((row) => ({
       bookingReference: row.bookingReference,
