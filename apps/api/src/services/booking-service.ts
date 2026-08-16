@@ -45,7 +45,7 @@ export const createBookingService = async ({
 export const createBookingItemsService = async (
   bookingItems: BookingItem[],
 ) => {
-  db.insert(bookingItemsTable).values(bookingItems);
+  await db.insert(bookingItemsTable).values(bookingItems);
 };
 
 export const getBookingsService = async (dbUserId: number) => {
