@@ -213,3 +213,48 @@ export type UserBookingSchema_T = z.infer<typeof UserBookingSchema>;
 export type UserBookingSchemaResponse_T = {
   data: UserBookingSchema_T[];
 };
+
+//
+
+const ChatEventSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  coverImage: z.string().nullable(),
+  rating: z.string(),
+  reviewCount: z.number(),
+  lowestPrice: z.string(),
+});
+export type ChatEventSchema_T = z.infer<typeof ChatEventSchema>;
+
+const ChatDataSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("events"),
+    items: z.array(ChatEventSchema),
+  }),
+  z.object({
+    type: z.literal("bookings"),
+    items: z.array(UserBookingSchema),
+  }),
+  z.object({
+    type: z.literal("event"),
+    item: ChatEventSchema,
+  }),
+]);
+export type ChatMessageSchema_T = z.infer<typeof ChatDataSchema>;
+
+//
+
+export const ChatRequestSchema = z.object({
+  message: z.string().min(1),
+  previousInteractionId: z.string().optional(),
+});
+export type ChatRequestSchema_T = z.infer<typeof ChatRequestSchema>;
+
+//
+
+export const ChatResponseSchema = z.object({
+  interactionId: z.string(),
+  message: z.string(),
+  data: ChatDataSchema.nullable(),
+});
+export type ChatResponseSchema_T = z.infer<typeof ChatResponseSchema>;

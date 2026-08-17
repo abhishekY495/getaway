@@ -15,6 +15,7 @@
   "type": "module",
   "dependencies": {
     "@clerk/express": "^2.1.50",
+    "@google/genai": "^2.17.1",
     "@neondatabase/serverless": "^1.1.0",
     "@repo/types": "^1.0.0",
     "cors": "^2.8.6",

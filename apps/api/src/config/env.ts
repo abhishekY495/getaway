@@ -14,4 +14,5 @@ export const ENV = {
   PORT: getEnv("PORT"),
   NODE_ENV: getEnv("NODE_ENV"),
   DATABASE_URL: getEnv("DATABASE_URL"),
+  GEMINI_API_KEY: getEnv("GEMINI_API_KEY"),
 };

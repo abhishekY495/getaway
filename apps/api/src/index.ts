@@ -8,6 +8,7 @@ import { venuesRoutes } from "./routes/venues-route.js";
 import { eventsRoutes } from "./routes/events-routes.js";
 import { search } from "./controller/search-controller.js";
 import { bookingsRoutes } from "./routes/bookings-routes.js";
+import { chatRoutes } from "./routes/chat-routes.js";
 
 const app = express();
 const port = ENV.PORT;
@@ -37,6 +38,7 @@ app.use("/destinations", destinationsRoutes);
 app.use("/venues", venuesRoutes);
 app.use("/events", eventsRoutes);
 app.use("/bookings", bookingsRoutes);
+app.use("/chat", chatRoutes);
 
 app.listen(port, () => {
   console.log(`server started on http://localhost:${port}`);
