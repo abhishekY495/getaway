@@ -31,7 +31,7 @@ export const getTopEventsService = async () => {
   return events;
 };
 
-export const getCityEventsService = async (cityId: number) => {
+export const getCityEventsByCityIdService = async (cityId: number) => {
   const [city] = await db
     .select({
       name: citiesTable.name,
@@ -66,6 +66,44 @@ export const getCityEventsService = async (cityId: number) => {
     .where(eq(venuesTable.cityId, cityId));
 
   return { city, events };
+};
+
+export const getCityEventsByCityNameService = async (cityName: string) => {
+  const [city] = await db
+    .select({
+      id: citiesTable.id,
+      name: citiesTable.name,
+      coverImage: citiesTable.coverImage,
+    })
+    .from(citiesTable)
+    .where(ilike(citiesTable.name, cityName))
+    .limit(1);
+
+  if (!city) {
+    throw new Error("City not found");
+  }
+
+  const events = await db
+    .select({
+      id: eventsTable.id,
+      title: eventsTable.title,
+      coverImage: eventImagesTable.url,
+      rating: eventsTable.rating,
+      reviewCount: eventsTable.reviewCount,
+      lowestPrice: eventsTable.adultPrice,
+    })
+    .from(eventsTable)
+    .innerJoin(venuesTable, eq(eventsTable.venueId, venuesTable.id))
+    .leftJoin(
+      eventImagesTable,
+      and(
+        eq(eventImagesTable.eventId, eventsTable.id),
+        eq(eventImagesTable.isCover, true),
+      ),
+    )
+    .where(eq(venuesTable.cityId, city.id));
+
+  return events;
 };
 
 export const getVenueEventsService = async (venueId: number) => {

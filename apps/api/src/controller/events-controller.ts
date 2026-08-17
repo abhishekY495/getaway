@@ -10,7 +10,7 @@ import {
   type GetVenueEventsResponse_T,
 } from "@repo/types";
 import {
-  getCityEventsService,
+  getCityEventsByCityIdService,
   getEventService,
   getTopEventsService,
   getVenueEventsService,
@@ -66,7 +66,7 @@ export const getCityEvents = async (
 
     const cityId = Number(req.params.cityId);
 
-    const { city, events } = await getCityEventsService(cityId);
+    const { city, events } = await getCityEventsByCityIdService(cityId);
 
     res.json({
       data: { city, events },
