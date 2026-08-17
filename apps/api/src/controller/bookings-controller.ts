@@ -1,8 +1,5 @@
 import { getAuth } from "@clerk/express";
-import type {
-  UserBookingSchema_T,
-  UserBookingSchemaResponse_T,
-} from "@repo/types";
+import type { UserBookingSchemaResponse_T } from "@repo/types";
 import type { Request, Response } from "express";
 import { getUserService } from "../services/user-service.js";
 import { getBookingsService } from "../services/booking-service.js";
@@ -26,7 +23,7 @@ export const getBookings = async (
 
     const bookingRows = await getBookingsService(dbUser.id);
 
-    const bookings: UserBookingSchema_T[] = bookingRows.map((row) => ({
+    const bookings = bookingRows.map((row) => ({
       bookingReference: row.bookingReference,
       visitDate: row.visitDate,
       eventId: row.eventId,
