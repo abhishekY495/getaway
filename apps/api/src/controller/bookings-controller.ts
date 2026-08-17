@@ -28,7 +28,7 @@ export const getBookings = async (
 
     const bookings: UserBookingSchema_T[] = bookingRows.map((row) => ({
       bookingReference: row.bookingReference,
-      visitDate: row.visitDate.toISOString(),
+      visitDate: row.visitDate,
       eventId: row.eventId,
       eventTitle: row.eventTitle,
       eventCoverImage: row.eventCoverImage,
