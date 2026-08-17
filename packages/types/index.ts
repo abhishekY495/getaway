@@ -201,7 +201,7 @@ export type BookingSchemaResponse_T = z.infer<typeof BookingSchemaResponse>;
 
 export const UserBookingSchema = z.object({
   bookingReference: z.string(),
-  visitDate: z.string(),
+  visitDate: z.date(),
   eventId: z.number(),
   eventTitle: z.string(),
   eventCoverImage: z.string().nullable(),
