@@ -25,7 +25,7 @@ const calendarTheme: CalendarItemDayWithContainerProps["theme"] = {
   active: () => ({
     container: {
       backgroundColor: "#a855f720",
-      borderWidth: 2,
+      borderWidth: 1,
       borderColor: "#a855f7",
     },
   }),
@@ -98,6 +98,7 @@ export function EventCalendarMonth({
                           ? "bg-white text-purple-600"
                           : "bg-green-100 text-black"
                     }`}
+                    style={{ minWidth: 42, alignItems: "center" }}
                   >
                     {isDisabled ? (
                       <Text className="text-neutral-400 text-xs font-semibold">

@@ -45,7 +45,7 @@ export default function EventFooter({ event }: { event: EventSchema_T }) {
       <View className="flex-row justify-between items-center p-5 px-8 border-t border-neutral-300">
         <View>
           <Text className="text-sm text-neutral-500">from</Text>
-          <Text className="text-xl font-black">${event.childPrice}</Text>
+          <Text className="text-xl font-black">${event.adultPrice}</Text>
         </View>
 
         <Pressable
