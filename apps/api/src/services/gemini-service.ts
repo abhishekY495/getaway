@@ -6,7 +6,7 @@ import type {
   ChatResponseSchema_T,
   UserBookingSchema_T,
 } from "@repo/types";
-import { SYSTEM_INSTRUCTION } from "../utils/constants.js";
+import { GEMINI_MODEL, SYSTEM_INSTRUCTION } from "../utils/constants.js";
 
 const client = new GoogleGenAI({
   apiKey: ENV.GEMINI_API_KEY,
@@ -22,7 +22,7 @@ export const chatWithGemini = async ({
   userId: number;
 }): Promise<ChatResponseSchema_T> => {
   let interaction = await client.interactions.create({
-    model: "gemini-3.7-flash",
+    model: GEMINI_MODEL,
     input: message,
     tools,
     store: true,
@@ -90,7 +90,7 @@ export const chatWithGemini = async ({
     }));
 
     interaction = await client.interactions.create({
-      model: "gemini-3.7-flash",
+      model: GEMINI_MODEL,
       input: functionResults,
       tools,
       store: true,

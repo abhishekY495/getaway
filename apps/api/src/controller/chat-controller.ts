@@ -25,8 +25,6 @@ export const chatting = async (
       req.body,
     );
 
-    console.log(123, message);
-
     const result = await chatWithGemini({
       message,
       userId: dbUser.id,
@@ -35,6 +33,7 @@ export const chatting = async (
 
     res.json(result);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Something went wrong" });
   }
 };
