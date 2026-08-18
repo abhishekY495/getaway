@@ -1,5 +1,10 @@
 import { Tabs } from "expo-router";
-import { CompassIcon, TicketIcon, UserIcon } from "lucide-react-native";
+import {
+  BotIcon,
+  CompassIcon,
+  TicketIcon,
+  UserIcon,
+} from "lucide-react-native";
 
 export default function TabsLayout() {
   return (
@@ -36,6 +41,15 @@ export default function TabsLayout() {
               size={size}
               strokeWidth={focused ? 3 : 2}
             />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ai-chat"
+        options={{
+          title: "AI Chat",
+          tabBarIcon: ({ color, size, focused }) => (
+            <BotIcon color={color} size={size} strokeWidth={focused ? 3 : 2} />
           ),
         }}
       />
