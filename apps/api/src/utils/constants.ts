@@ -1,4 +1,9 @@
-export const GEMINI_MODEL = "gemini-3.5-flash"
+export const GEMINI_MODEL = "gemini-3.5-flash";
+
+export const TOOL_NAMES = {
+  searchEvents: "search_events",
+  getBookings: "get_bookings",
+};
 
 export const SYSTEM_INSTRUCTION = `
 You are an assistant for a events and travel booking application.

@@ -1,10 +1,11 @@
 import { Type } from "@google/genai";
 import { getBookingsService } from "../services/booking-service.js";
 import { getCityEventsByCityNameService } from "../services/event-service.js";
+import { TOOL_NAMES } from "../utils/constants.js";
 
 const searchEventsTool = {
   type: "function" as const,
-  name: "search_events",
+  name: TOOL_NAMES.searchEvents,
   description:
     "Search for events and experiences. Use this when the user wants to find activities, attractions, tours, or experiences in a particular city or based on a search query.",
   parameters: {
@@ -20,7 +21,7 @@ const searchEventsTool = {
 };
 const getMyBookingsTool = {
   type: "function" as const,
-  name: "get_my_bookings",
+  name: TOOL_NAMES.getBookings,
   description:
     "Retrieve a list of all events booked by the user. Use this when the user asks to see their bookings, reservations, tickets, or trips.",
   parameters: {
@@ -37,9 +38,9 @@ export async function executeTool(
   userId: number,
 ) {
   switch (name) {
-    case "search_events":
+    case TOOL_NAMES.searchEvents:
       return await getCityEventsByCityNameService(args.query as string);
-    case "get_my_bookings":
+    case TOOL_NAMES.getBookings:
       return await getBookingsService(userId);
     default:
       throw new Error(`Unknown tool: ${name}`);
