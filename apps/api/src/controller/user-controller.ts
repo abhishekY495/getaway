@@ -80,6 +80,26 @@ export const addExpoPushToken = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Expo push token is required" });
     }
 
+    const [user] = await db
+      .select({
+        expoPushToken: usersTable.expoPushToken,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.clerkId, userId))
+      .limit(1);
+
+    if (!user) {
+      return res.status(404).json({
+        error: "User does not exist",
+      });
+    }
+
+    if (user.expoPushToken === expoPushToken) {
+      return res.status(200).json({
+        message: "Expo push token is already up to date",
+      });
+    }
+
     await db
       .update(usersTable)
       .set({
