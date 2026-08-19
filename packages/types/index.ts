@@ -258,3 +258,10 @@ export const ChatResponseSchema = z.object({
   data: ChatDataSchema.nullable(),
 });
 export type ChatResponseSchema_T = z.infer<typeof ChatResponseSchema>;
+
+//
+
+export const ExpoPushTokenSchema = z.object({
+  expoPushToken: z.string(),
+});
+export type ExpoPushTokenSchema_T = z.infer<typeof ExpoPushTokenSchema>;

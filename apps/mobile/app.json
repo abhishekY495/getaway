@@ -18,7 +18,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.mobile",
+      "package": "com.abhishek.getaway",
+      "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
@@ -39,11 +40,19 @@
       "@clerk/expo",
       "expo-secure-store",
       "expo-video",
+      "expo-notifications",
       "react-native-enriched-markdown"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9897a759-56e5-4b83-81ab-dedea9d8343b"
+      }
+    },
+    "owner": "abhishekby12-org"
   }
 }

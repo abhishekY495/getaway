@@ -1,3 +1,7 @@
+import { registerForPushNotifications } from "@/lib/notifications";
+import { useEffect } from "react";
+import * as Notifications from "expo-notifications";
+import { useAddExpoPushToken } from "@/lib/hooks/user/use-add-expo-push-token";
 import { Tabs } from "expo-router";
 import {
   BotIcon,
@@ -7,6 +11,27 @@ import {
 } from "lucide-react-native";
 
 export default function TabsLayout() {
+  const { mutate } = useAddExpoPushToken();
+
+  useEffect(() => {
+    registerForPushNotifications()
+      .then((token) => {
+        mutate({ expoPushToken: token });
+      })
+      .catch((error) => {
+        console.error("Notification save failed:", error);
+      });
+  }, []);
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowBanner: true,
+      shouldShowList: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+
   return (
     <Tabs
       screenOptions={{
