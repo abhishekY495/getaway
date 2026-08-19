@@ -66,3 +66,31 @@ export const addUser = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Something went wrong" });
   }
 };
+
+export const addExpoPushToken = async (req: Request, res: Response) => {
+  try {
+    const { isAuthenticated, userId } = getAuth(req);
+    if (!isAuthenticated || !userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const { expoPushToken } = req.body;
+
+    if (!expoPushToken) {
+      return res.status(400).json({ error: "Expo push token is required" });
+    }
+
+    await db
+      .update(usersTable)
+      .set({
+        expoPushToken,
+      })
+      .where(eq(usersTable.clerkId, userId));
+
+    return res.status(200).json({
+      message: "Expo push token added successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
