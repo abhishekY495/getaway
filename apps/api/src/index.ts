@@ -1,5 +1,6 @@
 import express, { type Response } from "express";
 import type { API_RESPONSE_T } from "@repo/types";
+import morgan from "morgan";
 import { clerkMiddleware } from "@clerk/express";
 import { userRoutes } from "./routes/user-routes.js";
 import { ENV } from "./config/env.js";
@@ -14,6 +15,7 @@ const app = express();
 const port = ENV.PORT;
 
 app.use(express.json());
+app.use(morgan("dev"));
 
 app.get("/", (req, res: Response<API_RESPONSE_T>) => {
   res.json({
