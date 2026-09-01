@@ -26,19 +26,6 @@ export const getTopEvents = async (
   res: Response<GetTopEventsResponse_T | { error: string }>,
 ) => {
   try {
-    const { isAuthenticated, userId } = getAuth(req);
-
-    if (!isAuthenticated) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    const user = await clerkClient.users.getUser(userId);
-    if (!user) {
-      res.status(401).json({ error: "User does not exist" });
-      return;
-    }
-
     const events = await getTopEventsService();
     res.json({ data: events });
   } catch (error) {
@@ -51,19 +38,6 @@ export const getCityEvents = async (
   res: Response<GetCityEventsResponse_T | { error: string }>,
 ) => {
   try {
-    const { isAuthenticated, userId } = getAuth(req);
-
-    if (!isAuthenticated) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    const user = await clerkClient.users.getUser(userId);
-    if (!user) {
-      res.status(401).json({ error: "User does not exist" });
-      return;
-    }
-
     const cityId = Number(req.params.cityId);
 
     const { city, events } = await getCityEventsByCityIdService(cityId);
@@ -81,19 +55,6 @@ export const getVenueEvents = async (
   res: Response<GetVenueEventsResponse_T | { error: string }>,
 ) => {
   try {
-    const { isAuthenticated, userId } = getAuth(req);
-
-    if (!isAuthenticated) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    const user = await clerkClient.users.getUser(userId);
-    if (!user) {
-      res.status(401).json({ error: "User does not exist" });
-      return;
-    }
-
     const venueId = Number(req.params.venueId);
 
     const { events, venue } = await getVenueEventsService(venueId);
@@ -111,19 +72,6 @@ export const getEvent = async (
   res: Response<GetEventResponse_T | { error: string }>,
 ) => {
   try {
-    const { isAuthenticated, userId } = getAuth(req);
-
-    if (!isAuthenticated) {
-      res.status(401).json({ error: "Unauthorized" });
-      return;
-    }
-
-    const user = await clerkClient.users.getUser(userId);
-    if (!user) {
-      res.status(401).json({ error: "User does not exist" });
-      return;
-    }
-
     const eventId = Number(req.params.eventId);
 
     const event = await getEventService(eventId);
