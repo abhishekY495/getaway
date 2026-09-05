@@ -10,6 +10,7 @@ import { eventsRoutes } from "./routes/events-routes.js";
 import { search } from "./controller/search-controller.js";
 import { bookingsRoutes } from "./routes/bookings-routes.js";
 import { chatRoutes } from "./routes/chat-routes.js";
+import { notificationRoutes } from "./routes/notification-routes.js";
 
 const app = express();
 const port = ENV.PORT;
@@ -41,6 +42,7 @@ app.use("/venues", venuesRoutes);
 app.use("/events", eventsRoutes);
 app.use("/bookings", bookingsRoutes);
 app.use("/chat", chatRoutes);
+app.use("/notification", notificationRoutes);
 
 app.listen(port, () => {
   console.log(`server started on http://localhost:${port}`);
