@@ -1,10 +1,15 @@
 import Booking from "@/components/booking/booking";
 import { useGetBookings } from "@/lib/hooks/bookings/use-get-bookings";
+import { useState } from "react";
 import { View, Text, ActivityIndicator, FlatList } from "react-native";
 
 export default function BookingsScreen() {
-  const { data, isLoading } = useGetBookings();
+  const { data, isLoading, isRefetching, refetch } = useGetBookings();
   const bookings = data?.data;
+
+  const handleRefresh = async () => {
+    await refetch();
+  };
 
   if (isLoading) {
     return (
@@ -23,6 +28,8 @@ export default function BookingsScreen() {
         showsVerticalScrollIndicator={false}
         keyExtractor={(item) => item.bookingReference.toString()}
         renderItem={({ item }) => <Booking booking={item} />}
+        refreshing={isRefetching}
+        onRefresh={handleRefresh}
       />
     </View>
   );
