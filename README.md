@@ -1,6 +1,6 @@
 # Getaway
 
-A mobile travel and experiences booking app.
+A mobile travel and experiences app. <br/>
 Getaway lets users discover experiences, view event details, make bookings, manage their bookings, and interact with an AI concierge.
 
 ## Features
